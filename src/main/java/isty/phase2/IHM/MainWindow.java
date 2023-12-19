@@ -554,19 +554,22 @@ public class MainWindow {
 		vGroupe.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-			JSONObject req = new JSONObject();
-			req.put("id", idGroupe.getText());
-			String rep = sess.getGroupe(req.toString());
-			if (!rep.equals("erreur"))
-			{
+
+
+
+			// JSONObject req = new JSONObject();
+			// req.put("id", idGroupe.getText());
+			// String rep = sess.getGroupe(req.toString());
+			// if (!rep.equals("erreur"))
+			// {
 	
-			console.setText(rep);
-			}
-			else
-			{
-				console.setText("");
-				console.append("Erreur affichage vérifier l'exitence de l'id\n");
-			}
+			// console.setText(rep);
+			// }
+			// else
+			// {
+			// 	console.setText("");
+			// 	console.append("Erreur affichage vérifier l'exitence de l'id\n");
+			// }
 
 			}
 		});
@@ -587,25 +590,25 @@ public class MainWindow {
 		cGroupe.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				String isu = iSujet.getText();
-				String iel = iEleve.getText();
-				String iue = iEU.getText();
-				// Générez un ID unique entre 1 et 100 inclus
-				int randomId;
-				do {
-				    randomId = random.nextInt(100) + 1;
-				} while (!groupeIds.add(randomId));
+				// String isu = iSujet.getText();
+				// String iel = iEleve.getText();
+				// String iue = iEU.getText();
+				// // Générez un ID unique entre 1 et 100 inclus
+				// int randomId;
+				// do {
+				//     randomId = random.nextInt(100) + 1;
+				// } while (!groupeIds.add(randomId));
 
-				// Convertissez le nombre en une chaîne
-				String id = Integer.toString(randomId);
-				JSONObject obj = new JSONObject();
-				obj.put("id", id);
-				obj.put("ueID", iue);
-				obj.put("eleveID", iel);
-				obj.put("sujetID", isu);
-				console.setText("");
-				JSONObject objRet = new JSONObject(sess.createGroupe(obj.toString()));
-				console.append("Groupe crée, id :"+ objRet.getString("id"));
+				// // Convertissez le nombre en une chaîne
+				// String id = Integer.toString(randomId);
+				// JSONObject obj = new JSONObject();
+				// obj.put("id", id);
+				// obj.put("ueID", iue);
+				// obj.put("eleveID", iel);
+				// obj.put("sujetID", isu);
+				// console.setText("");
+				// JSONObject objRet = new JSONObject(sess.createGroupe(obj.toString()));
+				// console.append("Groupe crée, id :"+ objRet.getString("id"));
 			}
 		});
 		cGroupe.setBounds(477, 90, 117, 29);
@@ -617,15 +620,20 @@ public class MainWindow {
 		dUE.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				String id = idUE.getText();
-				JSONObject obj = new JSONObject();
-				obj.put("UUID", id);
-				console.setText("");
-				JSONObject objRet = new JSONObject(sess.deleteEU(obj.toString()));
-				if (objRet.getString("result").equals("done"))
-					console.append("UE supprimée, id :"+ id);
-				else
-					console.append("Erreur suppression vérfier l'exitence de l'id");
+
+
+
+
+
+				// String id = idUE.getText();
+				// JSONObject obj = new JSONObject();
+				// obj.put("UUID", id);
+				// console.setText("");
+				// JSONObject objRet = new JSONObject(sess.deleteEU(obj.toString()));
+				// if (objRet.getString("result").equals("done"))
+				// 	console.append("UE supprimée, id :"+ id);
+				// else
+				// 	console.append("Erreur suppression vérfier l'exitence de l'id");
 			}
 		});
 		dUE.setBounds(436, 243, 158, 29);
@@ -637,24 +645,24 @@ public class MainWindow {
 		vEleve.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				JSONObject req = new JSONObject();
-				req.put("id", idEleve.getText());
-				String rep = sess.getEleve(req.toString());
-				if (!rep.equals("erreur"))
-				{
-					JSONObject view  = new JSONObject(rep);
-					String id = view.getString("id");
-					String prenom = view.getString("prenom");
-					String nom = view.getString("nom");
-					console.setText("");
-					console.append(" Elève : ID ; Prenom ; Nom \n");
-					console.append(""+id+" ; "+ prenom +" ; "+ nom +"\n");
-				}
-				else
-				{
-					console.setText("");
-					console.append("Erreur affichage vérfier l'éxitence de l'id\n");
-				}
+				// JSONObject req = new JSONObject();
+				// req.put("id", idEleve.getText());
+				// String rep = sess.getEleve(req.toString());
+				// if (!rep.equals("erreur"))
+				// {
+				// 	JSONObject view  = new JSONObject(rep);
+				// 	String id = view.getString("id");
+				// 	String prenom = view.getString("prenom");
+				// 	String nom = view.getString("nom");
+				// 	console.setText("");
+				// 	console.append(" Elève : ID ; Prenom ; Nom \n");
+				// 	console.append(""+id+" ; "+ prenom +" ; "+ nom +"\n");
+				// }
+				// else
+				// {
+				// 	console.setText("");
+				// 	console.append("Erreur affichage vérfier l'éxitence de l'id\n");
+				// }
 
 
 			}
@@ -668,25 +676,25 @@ public class MainWindow {
 		vSujet.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				JSONObject req = new JSONObject();
-				req.put("id", idSujet.getText());
-				String rep = sess.getSujet(req.toString());
-				if (!rep.equals("erreur"))
-				{
-					JSONObject view  = new JSONObject(rep);
-					String id = view.getString("id");
-					String titre = view.getString("titre");
-					LocalTime fin = LocalTime.parse(view.getString("fin"));
-					LocalDate jour = LocalDate.parse(view.getString("jour"));
-					console.setText("");
-					console.append("Sujet : ID ; titre ; fin ; jour \n");
-					console.append(""+id+" ; "+ titre +" ; "+ fin +" ; "+jour +"\n");
-				}
-				else
-				{
-					console.setText("");
-					console.append("Erreur affichage vérfier l'exitence de l'id\n");
-				}
+				// JSONObject req = new JSONObject();
+				// req.put("id", idSujet.getText());
+				// String rep = sess.getSujet(req.toString());
+				// if (!rep.equals("erreur"))
+				// {
+				// 	JSONObject view  = new JSONObject(rep);
+				// 	String id = view.getString("id");
+				// 	String titre = view.getString("titre");
+				// 	LocalTime fin = LocalTime.parse(view.getString("fin"));
+				// 	LocalDate jour = LocalDate.parse(view.getString("jour"));
+				// 	console.setText("");
+				// 	console.append("Sujet : ID ; titre ; fin ; jour \n");
+				// 	console.append(""+id+" ; "+ titre +" ; "+ fin +" ; "+jour +"\n");
+				// }
+				// else
+				// {
+				// 	console.setText("");
+				// 	console.append("Erreur affichage vérfier l'exitence de l'id\n");
+				// }
 
 			}
 		});
@@ -699,28 +707,28 @@ public class MainWindow {
 		vUE.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				JSONObject req = new JSONObject();
-				req.put("id", idUE.getText());
-				String rep = sess.getUE(req.toString());
-				if (!rep.equals("erreur"))
-				{
-					JSONObject view  = new JSONObject(rep);
-					String id = view.getString("id");
-					String code = view.getString("code");
-					String intitule = view.getString("intitule");
-					float cours = Float.parseFloat(view.getString("cours"));
-					float td = Float.parseFloat(view.getString("td"));
-					float tp = Float.parseFloat(view.getString("tp"));
-					float valeur = Float.parseFloat(view.getString("valeur"));
-					console.setText("");
-					console.append("UE : ID;code ; intitule ; cours;td ; tp;valeur \n");
-					console.append(""+id+" ; "+ code +" ; "+ intitule +" ; "+cours +" ; "+td+ " ; "+ tp +" ; "+valeur+"\n");
-				}
-				else
-				{
-					console.setText("");
-					console.append("Erreur affichage vérfier l'exitence de l'id\n");
-				}
+				// JSONObject req = new JSONObject();
+				// req.put("id", idUE.getText());
+				// String rep = sess.getUE(req.toString());
+				// if (!rep.equals("erreur"))
+				// {
+				// 	JSONObject view  = new JSONObject(rep);
+				// 	String id = view.getString("id");
+				// 	String code = view.getString("code");
+				// 	String intitule = view.getString("intitule");
+				// 	float cours = Float.parseFloat(view.getString("cours"));
+				// 	float td = Float.parseFloat(view.getString("td"));
+				// 	float tp = Float.parseFloat(view.getString("tp"));
+				// 	float valeur = Float.parseFloat(view.getString("valeur"));
+				// 	console.setText("");
+				// 	console.append("UE : ID;code ; intitule ; cours;td ; tp;valeur \n");
+				// 	console.append(""+id+" ; "+ code +" ; "+ intitule +" ; "+cours +" ; "+td+ " ; "+ tp +" ; "+valeur+"\n");
+				// }
+				// else
+				// {
+				// 	console.setText("");
+				// 	console.append("Erreur affichage vérfier l'exitence de l'id\n");
+				// }
 			}
 		});
 		vUE.setBounds(303, 243, 135, 29);
@@ -732,15 +740,15 @@ public class MainWindow {
 		dSujet.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				String id = idSujet.getText();
-				JSONObject obj = new JSONObject();
-				obj.put("UUID", id);
-				console.setText("");
-				JSONObject objRet = new JSONObject(sess.deleteSujet(obj.toString()));
-				if (objRet.getString("result").equals("done"))
-					console.append("Sujet supprimé, id :"+ id);
-				else
-					console.append("Erreur suppression vérfier l'exitence de l'id");
+				// String id = idSujet.getText();
+				// JSONObject obj = new JSONObject();
+				// obj.put("UUID", id);
+				// console.setText("");
+				// JSONObject objRet = new JSONObject(sess.deleteSujet(obj.toString()));
+				// if (objRet.getString("result").equals("done"))
+				// 	console.append("Sujet supprimé, id :"+ id);
+				// else
+				// 	console.append("Erreur suppression vérfier l'exitence de l'id");
 				//TODO: This needs testing (not tested)
 			}
 		});
@@ -753,15 +761,15 @@ public class MainWindow {
 		dEleve.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				String id = idEleve.getText();
-				JSONObject obj = new JSONObject();
-				obj.put("UUID", id);
-				console.setText("");
-				JSONObject objRet = new JSONObject(sess.deleteEleve(obj.toString()));
-				if (objRet.getString("result").equals("done"))
-					console.append("Eleve supprimé, id :"+ id);
-				else
-					console.append("Erreur suppression vérfier l'exitence de l'id");
+				// String id = idEleve.getText();
+				// JSONObject obj = new JSONObject();
+				// obj.put("UUID", id);
+				// console.setText("");
+				// JSONObject objRet = new JSONObject(sess.deleteEleve(obj.toString()));
+				// if (objRet.getString("result").equals("done"))
+				// 	console.append("Eleve supprimé, id :"+ id);
+				// else
+				// 	console.append("Erreur suppression vérfier l'exitence de l'id");
 			}
 		});
 		dEleve.setBounds(436, 186, 158, 29);
@@ -773,31 +781,31 @@ public class MainWindow {
 		cUE.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				String co = code.getText();
-				String inti = intitule.getText();
-				String cou = cours.getText();
-				String TD = td.getText();
-				String TP = tp.getText();
-				String val = valeur.getText();
-				// Générez un ID unique entre 1 et 100 inclus
-				int randomId;
-				do {
-				    randomId = random.nextInt(100) + 1;
-				} while (!ueIds.add(randomId));
+				// String co = code.getText();
+				// String inti = intitule.getText();
+				// String cou = cours.getText();
+				// String TD = td.getText();
+				// String TP = tp.getText();
+				// String val = valeur.getText();
+				// // Générez un ID unique entre 1 et 100 inclus
+				// int randomId;
+				// do {
+				//     randomId = random.nextInt(100) + 1;
+				// } while (!ueIds.add(randomId));
 
-				// Convertissez le nombre en une chaîne
-				String id = Integer.toString(randomId);
-				JSONObject obj = new JSONObject();
-				obj.put("id", id);
-				obj.put("code", co);
-				obj.put("intitule", inti);
-				obj.put("cours", cou);
-				obj.put("td", TD);
-				obj.put("tp", TP);
-				obj.put("valeur", val);
-				console.setText("");
-				JSONObject objRet = new JSONObject(sess.createEU(obj.toString()));
-				console.append("UE cree, id :"+ objRet.getString("id"));
+				// // Convertissez le nombre en une chaîne
+				// String id = Integer.toString(randomId);
+				// JSONObject obj = new JSONObject();
+				// obj.put("id", id);
+				// obj.put("code", co);
+				// obj.put("intitule", inti);
+				// obj.put("cours", cou);
+				// obj.put("td", TD);
+				// obj.put("tp", TP);
+				// obj.put("valeur", val);
+				// console.setText("");
+				// JSONObject objRet = new JSONObject(sess.createEU(obj.toString()));
+				// console.append("UE cree, id :"+ objRet.getString("id"));
 
 			}
 		});
@@ -814,27 +822,27 @@ public class MainWindow {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				
-				// Convertissez le nombre en une chaîne
-				// Générez un ID unique entre 1 et 100 inclus
-				int randomId;
-				do {
-				    randomId = random.nextInt(100) + 1;
-				} while (!sujetIds.add(randomId));
+				// // Convertissez le nombre en une chaîne
+				// // Générez un ID unique entre 1 et 100 inclus
+				// int randomId;
+				// do {
+				//     randomId = random.nextInt(100) + 1;
+				// } while (!sujetIds.add(randomId));
 
-				// Convertissez le nombre en une chaîne
-				String id = Integer.toString(randomId);
-				String tit = titre.getText();
-				String fi = fin.getText();
-				String jo = jour.getText();
-				JSONObject obj = new JSONObject();
-				obj.put("id", id);
-				obj.put("titre", tit);
-				obj.put("fin", fi);
-				obj.put("jour", jo);
-				//TODO: Test this shit !
-				console.setText("");
-				JSONObject objRet = new JSONObject(sess.createSujet(obj.toString()));
-				console.append("Sujet crée, id :"+ objRet.getString("id"));
+				// // Convertissez le nombre en une chaîne
+				// String id = Integer.toString(randomId);
+				// String tit = titre.getText();
+				// String fi = fin.getText();
+				// String jo = jour.getText();
+				// JSONObject obj = new JSONObject();
+				// obj.put("id", id);
+				// obj.put("titre", tit);
+				// obj.put("fin", fi);
+				// obj.put("jour", jo);
+				// //TODO: Test this shit !
+				// console.setText("");
+				// JSONObject objRet = new JSONObject(sess.createSujet(obj.toString()));
+				// console.append("Sujet crée, id :"+ objRet.getString("id"));
 
 			}
 		});
@@ -847,23 +855,23 @@ public class MainWindow {
 		cEleve.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				String p = prenom.getText();
-				String n = nom.getText();
-				// Générez un ID unique entre 1 et 100 inclus
-				int randomId;
-				do {
-				    randomId = random.nextInt(100) + 1;
-				} while (!eleveIds.add(randomId));
+				// String p = prenom.getText();
+				// String n = nom.getText();
+				// // Générez un ID unique entre 1 et 100 inclus
+				// int randomId;
+				// do {
+				//     randomId = random.nextInt(100) + 1;
+				// } while (!eleveIds.add(randomId));
 
-				// Convertissez le nombre en une chaîne
-				String id = Integer.toString(randomId);
-				JSONObject obj = new JSONObject();
-				obj.put("id", id);
-				obj.put("prenom", p);
-				obj.put("nom", n);
-				console.setText("");
-				JSONObject objRet = new JSONObject(sess.createEleve(obj.toString()));
-				console.append("Eleve crée, id :"+ objRet.getString("id"));
+				// // Convertissez le nombre en une chaîne
+				// String id = Integer.toString(randomId);
+				// JSONObject obj = new JSONObject();
+				// obj.put("id", id);
+				// obj.put("prenom", p);
+				// obj.put("nom", n);
+				// console.setText("");
+				// JSONObject objRet = new JSONObject(sess.createEleve(obj.toString()));
+				// console.append("Eleve crée, id :"+ objRet.getString("id"));
 
 			}
 		});
@@ -876,11 +884,11 @@ public class MainWindow {
 		lGroupe.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				String ls = sess.listGroupe();
-				JSONObject obj = new JSONObject(ls);
-				console.setText("");
-				console.append("Groupe : ID ; ID Eleve ;ID Sujet ; ID Ue \n");
-				console.append(obj.getString("response"));
+				// String ls = sess.listGroupe();
+				// JSONObject obj = new JSONObject(ls);
+				// console.setText("");
+				// console.append("Groupe : ID ; ID Eleve ;ID Sujet ; ID Ue \n");
+				// console.append(obj.getString("response"));
 
 			}
 		});
@@ -893,11 +901,11 @@ public class MainWindow {
 		lEleve.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				String ls = sess.listEleve();
-				JSONObject obj = new JSONObject(ls);
-				console.setText("");
-				console.append("Elève : ID ;Prenom ; Nom \n");
-				console.append(obj.getString("response"));
+				// String ls = sess.listEleve();
+				// JSONObject obj = new JSONObject(ls);
+				// console.setText("");
+				// console.append("Elève : ID ;Prenom ; Nom \n");
+				// console.append(obj.getString("response"));
 
 			}
 		});
@@ -910,11 +918,11 @@ public class MainWindow {
 		lSujet.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				String ls = sess.listSujet();
-				JSONObject obj = new JSONObject(ls);
-				console.setText("");
-				console.append("Sujet : ID ; titre ;fin ; jour \n");
-				console.append(obj.getString("response"));
+				// String ls = sess.listSujet();
+				// JSONObject obj = new JSONObject(ls);
+				// console.setText("");
+				// console.append("Sujet : ID ; titre ;fin ; jour \n");
+				// console.append(obj.getString("response"));
 			}
 		});
 		lSujet.setBounds(317, 281, 127, 29);
@@ -926,11 +934,11 @@ public class MainWindow {
 		lUE.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				String ls = sess.listEU();
-				JSONObject obj = new JSONObject(ls);
-				console.setText("");
-				console.append("UE : ID ; code ; intitule ;cours ; td ; tp ; valeur \n");
-				console.append(obj.getString("response"));
+				// String ls = sess.listEU();
+				// JSONObject obj = new JSONObject(ls);
+				// console.setText("");
+				// console.append("UE : ID ; code ; intitule ;cours ; td ; tp ; valeur \n");
+				// console.append(obj.getString("response"));
 			}
 		});
 		lUE.setBounds(467, 281, 127, 29);

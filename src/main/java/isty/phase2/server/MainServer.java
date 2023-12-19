@@ -28,4 +28,12 @@ public class MainServer {
         }
     }
 
+    @Path("/init")
+    public static class initBDDRessource {
+        @GET
+        public String getHello() {
+            return "Hello, world!";
+        }
+    }
+
 }
