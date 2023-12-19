@@ -1,5 +1,20 @@
 # Groupe
 Groupe
+
+## Build
+### ECLIPSE
+ * RunAs -> maven install
+ * The jar file has been created in the target folder
+ * RunAs -> Java application
+ 
+### Command line
+  * ```mvn clean package```
+  * ```java -jar target/client.jar```
+  * ```java -jar target/server.jar```
+
+### Remove binaries
+    * ```mvn clean```
+    
 # Architecture
 ## Class diagram
 ![diagClass.png](./images/diagClass.png)
@@ -80,21 +95,6 @@ Groupe
 - ~~Req-arc-06~~:  L'identifiant des objets créés est attribuée par l'IHM.
 - ~~Req-arc-07~~ : Les requêtes vont uniquement du composant IHM vers je composant exposant les fonctions.
 
-
-## Build
-### ECLIPSE
- * RunAs -> maven install
- * The jar file has been created in the target folder
- * RunAs -> Java application
- 
-### Command line
-  * ```mvn clean package```
-  * ```java -jar target/client.jar```
-  * ```java -jar target/server.jar```
-
-### Remove binaries
-    * ```mvn clean```
-    
 ## Packages 
 - App: App controller
 - IHM: User interafce
