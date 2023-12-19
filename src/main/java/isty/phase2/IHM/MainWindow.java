@@ -26,6 +26,10 @@ import java.util.Random;
 import java.util.HashSet;
 import java.util.Set;
 
+import javax.ws.rs.client.Client;
+import javax.ws.rs.client.ClientBuilder;
+import javax.ws.rs.core.Response;
+
 public class MainWindow {
 
 	public JFrame frame;
@@ -47,6 +51,10 @@ public class MainWindow {
 		frame.getContentPane().setLayout(null);
 		frame.getContentPane().setBackground(Color.LIGHT_GRAY);
 
+		/**
+		 * Zone de Texte "prenom" de l'ELEVE
+		 * fonction de focus comprise
+		 */
 		JFormattedTextField prenom = new JFormattedTextField();
 		prenom.setText("Prenom");
 		prenom.setBounds(6, 6, 79, 26);
@@ -67,7 +75,10 @@ public class MainWindow {
         frame.getContentPane().add(prenom);
         frame.setVisible(true);
         
-        
+        /**
+		 * Zone de Texte "nom" de l'ELEVE
+		 * fonction de focus comprise
+		 */
 		JFormattedTextField nom = new JFormattedTextField();
 		nom.setText("Nom");
 		nom.setBounds(85, 6, 79, 26);
@@ -89,6 +100,10 @@ public class MainWindow {
         frame.setVisible(true);
 
 
+		/**
+		 * Zone de Texte "TITRE" du sujet
+		 * fonction de focus comprise
+		 */
         JFormattedTextField titre = new JFormattedTextField();
 		titre.setText("Titre");
 		titre.setBounds(6, 34, 79, 26);
@@ -110,6 +125,10 @@ public class MainWindow {
 		        frame.setVisible(true);
 		        
 
+		/**
+		 * Zone de Texte "Heure" du sujet
+		 * fonction de focus comprise
+		 */
 		JFormattedTextField fin = new JFormattedTextField();
 		fin.setText("Heure: hh:mm");
 		fin.setBounds(85, 34, 79, 26);
@@ -130,7 +149,10 @@ public class MainWindow {
         frame.getContentPane().add(fin);
         frame.setVisible(true);
 
-		
+		/**
+		 * Zone de Texte "Jour" du sujet
+		 * fonction de focus comprise
+		 */
         JFormattedTextField jour = new JFormattedTextField();
 		jour.setText("aa-mm-jj");
 		jour.setBounds(167, 34, 79, 26);
@@ -140,18 +162,22 @@ public class MainWindow {
             if (jour.getText().equals("aa-mm-jj")) {
             	jour.setText("");
             }
-        }
-        @Override
-        public void focusLost(FocusEvent e) {
-            if (jour.getText().isEmpty()) {
-            	jour.setText("aa-mm-jj");
-            }
-        }
+			}
+			@Override
+			public void focusLost(FocusEvent e) {
+				if (jour.getText().isEmpty()) {
+					jour.setText("aa-mm-jj");
+				}
+			}
 		});
 		frame.getContentPane().add(jour);
 		frame.setVisible(true);
 		            
 		
+		/**
+		 * Zone de Texte "CODE" de l'UE
+		 * fonction de focus comprise
+		 */
 		JFormattedTextField code = new JFormattedTextField();
 		code.setText("Code");
 		code.setBounds(6, 63, 79, 26);
@@ -161,18 +187,21 @@ public class MainWindow {
             if (code.getText().equals("Code")) {
             	code.setText("");
             }
-        }
-        @Override
-        public void focusLost(FocusEvent e) {
-            if (code.getText().isEmpty()) {
-            	code.setText("Code");
-            }
-        }
+			}
+			@Override
+			public void focusLost(FocusEvent e) {
+				if (code.getText().isEmpty()) {
+					code.setText("Code");
+				}
+			}
 		});
 		frame.getContentPane().add(code);
 		frame.setVisible(true);
 				            
-				        
+		/**
+		 * Zone de Texte "Intitulé" de l'UE
+		 * fonction de focus comprise
+		 */		        
 		JFormattedTextField intitule = new JFormattedTextField();
 		intitule.setText("Intitulé");
 		intitule.setBounds(85, 63, 79, 26);
@@ -182,18 +211,22 @@ public class MainWindow {
             if (intitule.getText().equals("Intitulé")) {
             	intitule.setText("");
             }
-        }
-        @Override
-        public void focusLost(FocusEvent e) {
-            if (intitule.getText().isEmpty()) {
-            	intitule.setText("Intitulé");
-            }
-        }
+			}
+			@Override
+			public void focusLost(FocusEvent e) {
+				if (intitule.getText().isEmpty()) {
+					intitule.setText("Intitulé");
+				}
+			}
 		});
 		frame.getContentPane().add(intitule);
 		frame.setVisible(true);
 						            
 
+		/**
+		 * Zone de Texte "TD" de l'UE
+		 * fonction de focus comprise
+		 */
 		JFormattedTextField td = new JFormattedTextField();
 		td.setText("TD (0.0)");
 		td.setBounds(167, 63, 79, 26);
@@ -215,6 +248,10 @@ public class MainWindow {
 		frame.setVisible(true);
 								            
 
+		/**
+		 * Zone de Texte "TP" de l'UE
+		 * fonction de focus comprise
+		 */
 		JFormattedTextField tp = new JFormattedTextField();
 		tp.setText("TP (0.0)");
 		tp.setBounds(247, 63, 79, 26);
@@ -236,6 +273,10 @@ public class MainWindow {
 		frame.setVisible(true);
 										            
 
+		/**
+		 * Zone de Texte COURS" de l'UE
+		 * fonction de focus comprise
+		 */
 		JFormattedTextField cours = new JFormattedTextField();
 		cours.setText("Cours(0.0)");
 		cours.setBounds(332, 63, 79, 26);
@@ -257,6 +298,10 @@ public class MainWindow {
 		frame.setVisible(true);
 												            
 
+		/**
+		 * Zone de Texte "Valeur" de l'UE
+		 * fonction de focus comprise
+		 */
 		JFormattedTextField valeur = new JFormattedTextField();
 		valeur.setText("Valeur(0.0)");
 		valeur.setBounds(411, 63, 68, 26);
@@ -278,6 +323,10 @@ public class MainWindow {
 		frame.setVisible(true);
 														            
 
+		/**
+		 * Zone de Texte "ID Eleve" du Groupe
+		 * fonction de focus comprise
+		 */
 		JFormattedTextField idEleve = new JFormattedTextField();
 		idEleve.setText("ID");
 		idEleve.setBounds(6, 186, 295, 26);
@@ -299,6 +348,10 @@ public class MainWindow {
         frame.setVisible(true);
 
 
+		/**
+		 * Zone de Texte "ID Sujet" du Groupe
+		 * fonction de focus comprise
+		 */
 		JFormattedTextField idSujet = new JFormattedTextField();
 		idSujet.setText("ID");
 		idSujet.setBounds(6, 214, 295, 26);
@@ -320,6 +373,10 @@ public class MainWindow {
 		frame.setVisible(true);
 		            
 
+		/**
+		 * Zone de Texte "IDUE" du Groupe
+		 * fonction de focus comprise
+		 */
 		JFormattedTextField idUE = new JFormattedTextField();
 		idUE.setText("ID");
 		idUE.setBounds(6, 243, 295, 26);
@@ -340,7 +397,10 @@ public class MainWindow {
         frame.getContentPane().add(idUE);
         frame.setVisible(true);
 
-
+		/**
+		 * Zone de Texte "ID ELEVE" pour la suppression
+		 * fonction de focus comprise
+		 */
 		JFormattedTextField iEleve = new JFormattedTextField();
 		iEleve.setText("ID Elève");
 		iEleve.setBounds(6, 90, 79, 26);
@@ -361,6 +421,10 @@ public class MainWindow {
         frame.getContentPane().add(iEleve);
         frame.setVisible(true);
 
+		/**
+		 * Zone de Texte "ID SUjet" pour la suppression
+		 * fonction de focus comprise
+		 */
 		JFormattedTextField iSujet = new JFormattedTextField();
 		iSujet.setText("ID Sujet");
 		iSujet.setBounds(85, 90, 79, 26);
@@ -381,6 +445,10 @@ public class MainWindow {
         frame.getContentPane().add(iSujet);
         frame.setVisible(true);
 
+		/**
+		 * Zone de Texte "ID UE" pour la suppression
+		 * fonction de focus comprise
+		 */
 		JFormattedTextField iEU = new JFormattedTextField();
 		iEU.setText("ID UE");
 		iEU.setBounds(167, 90, 79, 26);
@@ -401,10 +469,13 @@ public class MainWindow {
         frame.getContentPane().add(iEU);
         frame.setVisible(true);
 
-
+		/**
+		 * Zone de Texte "ID GROUPE" pour la suppression
+		 * fonction de focus comprise
+		 */
 		JFormattedTextField idGroupe = new JFormattedTextField();
 		idGroupe.setText("ID");
-		idGroupe.setBounds(6, 157, 295, 26);
+		idGroupe.setBounds(12, 157, 295, 26);
 		idGroupe.addFocusListener(new FocusAdapter() {
             @Override
             public void focusGained(FocusEvent e) {
@@ -431,9 +502,33 @@ public class MainWindow {
         frame.getContentPane().add(scrollPane);
 
 
+		/**
+		 * Bouton "Suppr Groupe" 
+		 * Avec la fonction d'effacement comprise de le action Listener
+		 */
 		JButton dGroupe = new JButton("Supprimer groupe");
 		dGroupe.addActionListener(new ActionListener() {
 			@Override
+			public void actionPerformed(ActionEvent e) {
+				
+				String url = "http://localhost:8080/hello"; // Remplacez par votre endpoint réel
+
+				Client client = ClientBuilder.newClient();
+				Response response = client.target(url).request().get();
+
+				if (response.getStatus() == 200) {
+					String resultat = response.readEntity(String.class);
+					System.out.println("Réponse du serveur : " + resultat);
+				} else {
+					System.out.println("Erreur lors de la requête. Code : " + response.getStatus());
+				}
+
+				client.close();
+				
+
+			}
+			/*
+			 * @Override
 			public void actionPerformed(ActionEvent e) {
 				String id = idGroupe.getText();
 				JSONObject obj = new JSONObject();
@@ -447,12 +542,14 @@ public class MainWindow {
 				
 
 			}
+			*/
 		});
 		dGroupe.setBounds(436, 157, 158, 29);
 		dGroupe.setForeground(Color.white);
 		dGroupe.setBackground(Color.DARK_GRAY);
 		frame.getContentPane().add(dGroupe);
 
+		
 		JButton vGroupe = new JButton("Afficher groupe");
 		vGroupe.addActionListener(new ActionListener() {
 			@Override
