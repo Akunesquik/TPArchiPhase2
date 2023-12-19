@@ -26,6 +26,10 @@ import java.util.Random;
 import java.util.HashSet;
 import java.util.Set;
 
+import javax.ws.rs.client.Client;
+import javax.ws.rs.client.ClientBuilder;
+import javax.ws.rs.core.Response;
+
 public class MainWindow {
 
 	public JFrame frame;
@@ -161,13 +165,13 @@ public class MainWindow {
             if (code.getText().equals("Code")) {
             	code.setText("");
             }
-        }
-        @Override
-        public void focusLost(FocusEvent e) {
-            if (code.getText().isEmpty()) {
-            	code.setText("Code");
-            }
-        }
+			}
+			@Override
+			public void focusLost(FocusEvent e) {
+				if (code.getText().isEmpty()) {
+					code.setText("Code");
+				}
+			}
 		});
 		frame.getContentPane().add(code);
 		frame.setVisible(true);
@@ -182,13 +186,13 @@ public class MainWindow {
             if (intitule.getText().equals("Intitulé")) {
             	intitule.setText("");
             }
-        }
-        @Override
-        public void focusLost(FocusEvent e) {
-            if (intitule.getText().isEmpty()) {
-            	intitule.setText("Intitulé");
-            }
-        }
+			}
+			@Override
+			public void focusLost(FocusEvent e) {
+				if (intitule.getText().isEmpty()) {
+					intitule.setText("Intitulé");
+				}
+			}
 		});
 		frame.getContentPane().add(intitule);
 		frame.setVisible(true);
@@ -435,6 +439,26 @@ public class MainWindow {
 		dGroupe.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
+				
+				String url = "http://localhost:8080/hello"; // Remplacez par votre endpoint réel
+
+				Client client = ClientBuilder.newClient();
+				Response response = client.target(url).request().get();
+
+				if (response.getStatus() == 200) {
+					String resultat = response.readEntity(String.class);
+					System.out.println("Réponse du serveur : " + resultat);
+				} else {
+					System.out.println("Erreur lors de la requête. Code : " + response.getStatus());
+				}
+
+				client.close();
+				
+
+			}
+			/*
+			 * @Override
+			public void actionPerformed(ActionEvent e) {
 				String id = idGroupe.getText();
 				JSONObject obj = new JSONObject();
 				obj.put("UUID", id);
@@ -447,6 +471,7 @@ public class MainWindow {
 				
 
 			}
+			*/
 		});
 		dGroupe.setBounds(436, 157, 158, 29);
 		dGroupe.setForeground(Color.white);
