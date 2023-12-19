@@ -1,5 +1,6 @@
 package isty.phase2.server;
 
+import java.util.logging.Logger;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.Files;
@@ -11,7 +12,7 @@ import java.io.IOException;
 public class ServerConfig {
 	static final String configDir = "serverConfig";
 	static final String configFile = "serverConfig.json";
-
+	private static Logger logger = Logger.getLogger(ServerConfig.class.getSimpleName());
 	private int port;
 	private String adress;
 
@@ -24,18 +25,17 @@ public class ServerConfig {
 		Path currentPath = Paths.get("");
 		Path configDirPath = currentPath.resolve(configDir);
 		if (Files.exists(configDirPath) && Files.isDirectory(configDirPath)) {
-			System.out.println("Find server configurtion folder");
 		} else {
 			try {
 				Files.createDirectory(configDirPath);
-				System.out.println("Create server configurtion folder");
+				logger.info("Create server configurtion folder");
 			} catch (IOException e) {
 				e.printStackTrace();
 			}
 		}
 		Path configFilePath = configDirPath.resolve(configFile);
 		if (Files.exists(configFilePath) && Files.isReadable(configFilePath)) {
-			System.out.println("Find server configurtion file");
+			logger.info("Find server configurtion file");
 		} else {
 			try {
 				Files.createFile(configFilePath);
@@ -43,7 +43,7 @@ public class ServerConfig {
 			} catch (IOException e) {
 				e.printStackTrace();
 			}
-			System.out.println("Create a default server configurtion file");
+			logger.info("Create a default server configurtion file");
 		}
 	}
 
