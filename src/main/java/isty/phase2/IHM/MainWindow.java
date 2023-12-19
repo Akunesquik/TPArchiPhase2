@@ -45,6 +45,7 @@ public class MainWindow {
 	 * Initialize the contents of the frame.
 	 */
 	private void initialize(GroupeImplementation sess) {
+		int portServeur = 8080;
 		frame = new JFrame();
 		frame.setBounds(100, 100, 600, 600);
 		frame.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
@@ -511,7 +512,7 @@ public class MainWindow {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				
-				String url = "http://localhost:8080/hello"; // Remplacez par votre endpoint réel
+				String url = "http://localhost:"+portServeur+"/hello"; // Remplacez par votre endpoint réel
 
 				Client client = ClientBuilder.newClient();
 				Response response = client.target(url).request().get();
@@ -645,6 +646,8 @@ public class MainWindow {
 		vEleve.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
+
+
 				// JSONObject req = new JSONObject();
 				// req.put("id", idEleve.getText());
 				// String rep = sess.getEleve(req.toString());
@@ -901,6 +904,26 @@ public class MainWindow {
 		lEleve.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
+
+
+				String url = "http://localhost:"+portServeur+"/Eleve/list"; // Remplacez par votre endpoint réel
+
+				Client client = ClientBuilder.newClient();
+				Response response = client.target(url).request().get();
+
+				if (response.getStatus() == 200) {
+					String resultat = response.readEntity(String.class);
+					JSONObject obj = new JSONObject(resultat);
+					console.setText("");
+					console.append("Elève : ID ;Prenom ; Nom \n");
+					console.append(obj.getString("response"));
+
+				} else {
+					System.out.println("Erreur lors de la requête. Code : " + response.getStatus());
+				}
+
+				client.close();
+
 				// String ls = sess.listEleve();
 				// JSONObject obj = new JSONObject(ls);
 				// console.setText("");
