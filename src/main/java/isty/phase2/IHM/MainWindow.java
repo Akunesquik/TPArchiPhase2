@@ -1009,13 +1009,20 @@ public class MainWindow {
 				console.append(response.toString());
 				// Traiter la réponse
 				if (response.getStatus() == 200) {
+					console.setText("");
 					String resultat = response.readEntity(String.class);
 					JSONObject view  = new JSONObject(resultat);
-					if (view.getString("result").equals("done"))
+					System.out.println("plop");
+					if (view.getString("result").equals("done")){
+						System.out.println("plop2");
 						console.append("Eleve supprimée, id :"+ idselect);
+					}
+						
 				} else {
 					System.out.println("Erreur lors de la requête. Code : " + response.getStatus());
 				}
+
+				client.close();
 				// String id = idEleve.getText();
 				// JSONObject obj = new JSONObject();
 				// obj.put("UUID", id);

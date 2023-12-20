@@ -107,7 +107,7 @@ public class MainServer {
         @Produces(MediaType.APPLICATION_JSON)
         public static String deleteEleve(@FormParam("id") String id) {
             JSONObject infos = new JSONObject();
-            infos.put("id", id);
+            infos.put("UUID", id);
             String ls = sess.deleteEleve(infos.toString());
             return ls;
         }
