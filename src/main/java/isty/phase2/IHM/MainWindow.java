@@ -4,31 +4,31 @@ package isty.phase2.IHM;
 import java.awt.Color;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.time.LocalDate;
-import java.time.LocalTime;
-import java.util.UUID;
+import java.awt.event.FocusAdapter;
+import java.awt.event.FocusEvent;
+import java.util.HashSet;
+import java.util.Random;
+import java.util.Set;
 
 import javax.swing.JButton;
 import javax.swing.JFormattedTextField;
 import javax.swing.JFrame;
-import javax.swing.JTextArea;
-import javax.swing.WindowConstants;
 import javax.swing.JScrollPane;
+import javax.swing.JTextArea;
 import javax.swing.ScrollPaneConstants;
-
-import java.awt.event.FocusAdapter;
-import java.awt.event.FocusEvent;
+import javax.swing.WindowConstants;
+import javax.ws.rs.client.Client;
+import javax.ws.rs.client.ClientBuilder;
+import javax.ws.rs.client.Entity;
+import javax.ws.rs.core.Form;
+import javax.ws.rs.core.MediaType;
+import javax.ws.rs.core.Response;
+import javax.ws.rs.client.WebTarget;
 
 import org.json.JSONObject;
 
 import isty.phase2.Groupe.GroupeImplementation;
-import java.util.Random;
-import java.util.HashSet;
-import java.util.Set;
 
-import javax.ws.rs.client.Client;
-import javax.ws.rs.client.ClientBuilder;
-import javax.ws.rs.core.Response;
 
 public class MainWindow {
 
@@ -858,6 +858,45 @@ public class MainWindow {
 		cEleve.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
+
+				// Créer une instance du client JAX-RS
+				Client client = ClientBuilder.newClient();
+
+				// Définir l'URL de la ressource
+				String apiUrl = "http://localhost:"+portServeur+"/Eleve/create"; // Remplacez par votre URL réelle
+				// Créer une instance de WebTarget pour l'URL de la ressource
+        		WebTarget target = client.target(apiUrl);
+
+				String p = prenom.getText();
+				String n = nom.getText();
+				// Générez un ID unique entre 1 et 100 inclus
+				 int randomId;
+				 do {
+				     randomId = random.nextInt(100) + 1;
+				 } while (!eleveIds.add(randomId));
+
+				Form form = new Form();
+				form.param("prenom", p);
+				form.param("nom", n);
+				form.param("id", String.valueOf(randomId));
+
+				// Envoyer la requête POST avec les données
+       			Response response = target
+                .request(MediaType.APPLICATION_JSON)
+                .post(Entity.entity(form, MediaType.APPLICATION_FORM_URLENCODED));
+				
+				// Traiter la réponse
+				if (response.getStatus() == 200) {
+
+					String resultat = response.readEntity(String.class);
+					JSONObject objRet = new JSONObject(resultat);
+					console.setText("");
+					console.append("Eleve crée, id :"+ objRet.getString("id"));
+				} else {
+					System.out.println("Erreur lors de la requête. Code : " + response.getStatus());
+				}
+				
+
 				// String p = prenom.getText();
 				// String n = nom.getText();
 				// // Générez un ID unique entre 1 et 100 inclus

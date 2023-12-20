@@ -5,10 +5,17 @@ import isty.phase2.server.ServerConfig;
 
 import org.glassfish.jersey.jdkhttp.JdkHttpServerFactory;
 import org.glassfish.jersey.server.ResourceConfig;
+
+import javax.ws.rs.Consumes;
+import javax.ws.rs.FormParam;
 import javax.ws.rs.GET;
+import javax.ws.rs.POST;
 import javax.ws.rs.Path;
+import javax.ws.rs.Produces;
 import javax.ws.rs.core.UriBuilder;
 import java.net.URI;
+
+import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import org.json.JSONObject;
 
@@ -61,6 +68,24 @@ public class MainServer {
             	String ls = sess.listEleve();
                 return ls;
         }
+
+        @POST
+        @Path("/create")
+        @Consumes(MediaType.APPLICATION_FORM_URLENCODED)
+        @Produces(MediaType.APPLICATION_JSON)
+        public static String createEleve(@FormParam("prenom") String p, @FormParam("nom") String n,@FormParam("id") String id ) {
+            	
+                // Convertissez le nombre en une chaîne
+				
+				JSONObject obj = new JSONObject();
+				obj.put("id", id);
+				obj.put("prenom", p);
+				obj.put("nom", n);
+
+                String ls = sess.createEleve(obj.toString());
+                return ls;
+        }
+
     }
 
     @Path("/Sujet")
