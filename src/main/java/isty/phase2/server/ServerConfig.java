@@ -34,14 +34,14 @@ public class ServerConfig {
 		} else {
 			try {
 				Files.createDirectory(configDirPath);
-				logger.info("Create server configurtion folder");
+				logger.info("Create server configuration folder");
 			} catch (IOException e) {
 				e.printStackTrace();
 			}
 		}
 		Path configFilePath = configDirPath.resolve(configFile);
 		if (Files.exists(configFilePath) && Files.isReadable(configFilePath)) {
-			logger.info("Find server configurtion file");
+			logger.info("Find server configuration file");
 		} else {
 			try {
 				Files.createFile(configFilePath);
@@ -49,7 +49,7 @@ public class ServerConfig {
 			} catch (IOException e) {
 				e.printStackTrace();
 			}
-			logger.info("Create a default server configurtion file");
+			logger.info("Create a default server configuration file");
 		}
 	}
 
