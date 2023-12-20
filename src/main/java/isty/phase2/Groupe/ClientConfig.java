@@ -1,4 +1,4 @@
-package isty.phase2.server;
+package isty.phase2.Groupe;
 
 import java.util.logging.Logger;
 import java.nio.file.Path;
@@ -9,14 +9,14 @@ import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
 
-public class ServerConfig {
-	static final String configDir = "serverConfig";
-	static final String configFile = "serverConfig.json";
-	private static Logger logger = Logger.getLogger(ServerConfig.class.getSimpleName());
+public class ClientConfig {
+	static final String configDir = "clientConfig";
+	static final String configFile = "clientConfig.json";
+	private static Logger logger = Logger.getLogger(ClientConfig.class.getSimpleName());
 	private int port;
 	private String adress;
 
-	public ServerConfig(String adress, int port) {
+	public ClientConfig(String adress, int port) {
 		this.adress = adress;
 		this.port = port;
 	}
@@ -28,14 +28,14 @@ public class ServerConfig {
 		} else {
 			try {
 				Files.createDirectory(configDirPath);
-				logger.info("Create server configurtion folder");
+				logger.info("Create client configurtion folder");
 			} catch (IOException e) {
 				e.printStackTrace();
 			}
 		}
 		Path configFilePath = configDirPath.resolve(configFile);
 		if (Files.exists(configFilePath) && Files.isReadable(configFilePath)) {
-			logger.info("Find server configurtion file");
+			logger.info("Find client configurtion file");
 		} else {
 			try {
 				Files.createFile(configFilePath);
@@ -43,12 +43,12 @@ public class ServerConfig {
 			} catch (IOException e) {
 				e.printStackTrace();
 			}
-			logger.info("Create a default server configurtion file");
+			logger.info("Create a default client configurtion file");
 		}
 	}
 
-	public static ServerConfig loadConfig() {
-		ServerConfig config = readJSON(Paths.get("").resolve(configDir).resolve(configFile));
+	public static ClientConfig loadConfig() {
+		ClientConfig config = readJSON(Paths.get("").resolve(configDir).resolve(configFile));
 		if (config.getPort() < 0 || config.getPort() > 65535) {
 			throw new IllegalArgumentException("Bad port number");
 		}
@@ -56,7 +56,7 @@ public class ServerConfig {
 	}
 
 	public static void initJSON(Path filePath) {
-		ServerConfig conf = new ServerConfig("http://localhost/", 8080);
+		ClientConfig conf = new ClientConfig("http://localhost/", 8080);
 		Gson gson = new Gson();
 		String jsonString = gson.toJson(conf);
 		try (FileWriter writer = new FileWriter(filePath.toAbsolutePath().toString())) {
@@ -66,11 +66,11 @@ public class ServerConfig {
 		}
 	}
 
-	public static ServerConfig readJSON(Path filePath) {
-		ServerConfig conf = new ServerConfig("http://localhost/", 8080);
+	public static ClientConfig readJSON(Path filePath) {
+		ClientConfig conf = new ClientConfig("http://localhost/", 8080);
 		try (FileReader reader = new FileReader(filePath.toAbsolutePath().toString())) {
 			Gson gson = new Gson();
-			conf = gson.fromJson(reader, ServerConfig.class);
+			conf = gson.fromJson(reader, ClientConfig.class);
 		} catch (IOException e) {
 			e.printStackTrace();
 		}

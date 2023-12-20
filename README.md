@@ -13,7 +13,7 @@ Groupe
   * ```java -jar target/server.jar```
 
 ### Remove binaries
-    * ```mvn clean```
+   * ```mvn clean```
     
 # Architecture
 ## Class diagram
