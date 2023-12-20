@@ -679,7 +679,43 @@ public class MainWindow {
 		JButton vEleve = new JButton("Afficher élève");
 		vEleve.addActionListener(new ActionListener() {
 			@Override
+			
 			public void actionPerformed(ActionEvent e) {
+				// Créer une instance du client JAX-RS
+				Client client = ClientBuilder.newClient();
+
+				// Définir l'URL de la ressource
+				String apiUrl = "http://localhost:"+portServeur+"/Eleve/search"; // Remplacez par votre URL réelle
+				// Créer une instance de WebTarget pour l'URL de la ressource
+        		WebTarget target = client.target(apiUrl);
+
+				String idselect = idEleve.getText().toString();
+				
+				Form form = new Form();
+				form.param("id",idselect);
+
+				// Envoyer la requête POST avec les données
+       			Response response = target
+                .request(MediaType.APPLICATION_JSON)
+                .post(Entity.entity(form, MediaType.APPLICATION_FORM_URLENCODED));
+				
+				// Traiter la réponse
+				if (response.getStatus() == 200) {
+
+					String resultat = response.readEntity(String.class);
+					JSONObject view  = new JSONObject(resultat);
+					String id = view.getString("id");
+					String prenom = view.getString("prenom");
+					String nom = view.getString("nom");
+					console.setText("");
+					console.append(" Elève : ID ; Prenom ; Nom \n");
+					console.append(""+id+" ; "+ prenom +" ; "+ nom +"\n");
+				} else {
+					System.out.println("Erreur lors de la requête. Code : " + response.getStatus());
+				}
+
+			}
+
 
 
 				// JSONObject req = new JSONObject();
@@ -703,7 +739,7 @@ public class MainWindow {
 
 
 			}
-		});
+		);
 		vEleve.setBounds(303, 186, 135, 29);
 		vEleve.setForeground(Color.white);
 		vEleve.setBackground(Color.DARK_GRAY);

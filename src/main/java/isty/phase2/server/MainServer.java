@@ -12,6 +12,7 @@ import javax.ws.rs.GET;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
+import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.UriBuilder;
 import java.net.URI;
 
@@ -69,6 +70,20 @@ public class MainServer {
             	String ls = sess.listEleve();
                 return ls;
         }
+
+        @POST
+        @Path("/search")
+        @Consumes(MediaType.APPLICATION_FORM_URLENCODED)
+        @Produces(MediaType.APPLICATION_JSON)
+        public static String getEleve(@FormParam("id") String id) {
+            System.out.println("id trouve: "+id);
+            JSONObject infos = new JSONObject();
+            infos.put("id", id);
+            String ls = sess.getEleve(infos.toString());
+            System.out.println("ls deduit: "+ls);
+            return ls;
+        }
+
 
         @POST
         @Path("/create")
