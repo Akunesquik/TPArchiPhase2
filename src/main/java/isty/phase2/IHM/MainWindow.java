@@ -4,31 +4,31 @@ package isty.phase2.IHM;
 import java.awt.Color;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.time.LocalDate;
-import java.time.LocalTime;
-import java.util.UUID;
+import java.awt.event.FocusAdapter;
+import java.awt.event.FocusEvent;
+import java.util.HashSet;
+import java.util.Random;
+import java.util.Set;
 
 import javax.swing.JButton;
 import javax.swing.JFormattedTextField;
 import javax.swing.JFrame;
-import javax.swing.JTextArea;
-import javax.swing.WindowConstants;
 import javax.swing.JScrollPane;
+import javax.swing.JTextArea;
 import javax.swing.ScrollPaneConstants;
-
-import java.awt.event.FocusAdapter;
-import java.awt.event.FocusEvent;
+import javax.swing.WindowConstants;
+import javax.ws.rs.client.Client;
+import javax.ws.rs.client.ClientBuilder;
+import javax.ws.rs.client.Entity;
+import javax.ws.rs.core.Form;
+import javax.ws.rs.core.MediaType;
+import javax.ws.rs.core.Response;
+import javax.ws.rs.client.WebTarget;
 
 import org.json.JSONObject;
 
 import isty.phase2.Groupe.GroupeImplementation;
-import java.util.Random;
-import java.util.HashSet;
-import java.util.Set;
 
-import javax.ws.rs.client.Client;
-import javax.ws.rs.client.ClientBuilder;
-import javax.ws.rs.core.Response;
 
 public class MainWindow {
 
@@ -45,6 +45,7 @@ public class MainWindow {
 	 * Initialize the contents of the frame.
 	 */
 	private void initialize(GroupeImplementation sess) {
+		int portServeur = 8080;
 		frame = new JFrame();
 		frame.setBounds(100, 100, 600, 600);
 		frame.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
@@ -511,7 +512,7 @@ public class MainWindow {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				
-				String url = "http://localhost:8080/hello"; // Remplacez par votre endpoint réel
+				String url = "http://localhost:"+portServeur+"/hello"; // Remplacez par votre endpoint réel
 
 				Client client = ClientBuilder.newClient();
 				Response response = client.target(url).request().get();
@@ -554,19 +555,22 @@ public class MainWindow {
 		vGroupe.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-			JSONObject req = new JSONObject();
-			req.put("id", idGroupe.getText());
-			String rep = sess.getGroupe(req.toString());
-			if (!rep.equals("erreur"))
-			{
+
+
+
+			// JSONObject req = new JSONObject();
+			// req.put("id", idGroupe.getText());
+			// String rep = sess.getGroupe(req.toString());
+			// if (!rep.equals("erreur"))
+			// {
 	
-			console.setText(rep);
-			}
-			else
-			{
-				console.setText("");
-				console.append("Erreur affichage vérifier l'exitence de l'id\n");
-			}
+			// console.setText(rep);
+			// }
+			// else
+			// {
+			// 	console.setText("");
+			// 	console.append("Erreur affichage vérifier l'exitence de l'id\n");
+			// }
 
 			}
 		});
@@ -587,25 +591,59 @@ public class MainWindow {
 		cGroupe.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
+
+				// Créer une instance du client JAX-RS
+				Client client = ClientBuilder.newClient();
+
+				// Définir l'URL de la ressource
+				String apiUrl = "http://localhost:"+portServeur+"/Groupe/create"; // Remplacez par votre URL réelle
+				// Créer une instance de WebTarget pour l'URL de la ressource
+        		WebTarget target = client.target(apiUrl);
+
 				String isu = iSujet.getText();
 				String iel = iEleve.getText();
 				String iue = iEU.getText();
-				// Générez un ID unique entre 1 et 100 inclus
-				int randomId;
-				do {
-				    randomId = random.nextInt(100) + 1;
-				} while (!groupeIds.add(randomId));
 
-				// Convertissez le nombre en une chaîne
-				String id = Integer.toString(randomId);
-				JSONObject obj = new JSONObject();
-				obj.put("id", id);
-				obj.put("ueID", iue);
-				obj.put("eleveID", iel);
-				obj.put("sujetID", isu);
-				console.setText("");
-				JSONObject objRet = new JSONObject(sess.createGroupe(obj.toString()));
-				console.append("Groupe crée, id :"+ objRet.getString("id"));
+				Form form = new Form();
+				form.param("iSujet",isu);
+				form.param("iEleve", iel);
+				form.param("iEU", iue);
+
+				// Envoyer la requête POST avec les données
+       			Response response = target
+                .request(MediaType.APPLICATION_JSON)
+                .post(Entity.entity(form, MediaType.APPLICATION_FORM_URLENCODED));
+				
+				// Traiter la réponse
+				if (response.getStatus() == 200) {
+
+					String resultat = response.readEntity(String.class);
+					JSONObject objRet = new JSONObject(resultat);
+					console.setText("");
+					console.append("Eleve crée, id :"+ objRet.getString("id"));
+				} else {
+					System.out.println("Erreur lors de la requête. Code : " + response.getStatus());
+				}
+
+				// String isu = iSujet.getText();
+				// String iel = iEleve.getText();
+				// String iue = iEU.getText();
+				// // Générez un ID unique entre 1 et 100 inclus
+				// int randomId;
+				// do {
+				//     randomId = random.nextInt(100) + 1;
+				// } while (!groupeIds.add(randomId));
+
+				// // Convertissez le nombre en une chaîne
+				// String id = Integer.toString(randomId);
+				// JSONObject obj = new JSONObject();
+				// obj.put("id", id);
+				// obj.put("ueID", iue);
+				// obj.put("eleveID", iel);
+				// obj.put("sujetID", isu);
+				// console.setText("");
+				// JSONObject objRet = new JSONObject(sess.createGroupe(obj.toString()));
+				// console.append("Groupe crée, id :"+ objRet.getString("id"));
 			}
 		});
 		cGroupe.setBounds(477, 90, 117, 29);
@@ -617,15 +655,20 @@ public class MainWindow {
 		dUE.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				String id = idUE.getText();
-				JSONObject obj = new JSONObject();
-				obj.put("UUID", id);
-				console.setText("");
-				JSONObject objRet = new JSONObject(sess.deleteEU(obj.toString()));
-				if (objRet.getString("result").equals("done"))
-					console.append("UE supprimée, id :"+ id);
-				else
-					console.append("Erreur suppression vérfier l'exitence de l'id");
+
+
+
+
+
+				// String id = idUE.getText();
+				// JSONObject obj = new JSONObject();
+				// obj.put("UUID", id);
+				// console.setText("");
+				// JSONObject objRet = new JSONObject(sess.deleteEU(obj.toString()));
+				// if (objRet.getString("result").equals("done"))
+				// 	console.append("UE supprimée, id :"+ id);
+				// else
+				// 	console.append("Erreur suppression vérfier l'exitence de l'id");
 			}
 		});
 		dUE.setBounds(436, 243, 158, 29);
@@ -637,24 +680,26 @@ public class MainWindow {
 		vEleve.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				JSONObject req = new JSONObject();
-				req.put("id", idEleve.getText());
-				String rep = sess.getEleve(req.toString());
-				if (!rep.equals("erreur"))
-				{
-					JSONObject view  = new JSONObject(rep);
-					String id = view.getString("id");
-					String prenom = view.getString("prenom");
-					String nom = view.getString("nom");
-					console.setText("");
-					console.append(" Elève : ID ; Prenom ; Nom \n");
-					console.append(""+id+" ; "+ prenom +" ; "+ nom +"\n");
-				}
-				else
-				{
-					console.setText("");
-					console.append("Erreur affichage vérfier l'éxitence de l'id\n");
-				}
+
+
+				// JSONObject req = new JSONObject();
+				// req.put("id", idEleve.getText());
+				// String rep = sess.getEleve(req.toString());
+				// if (!rep.equals("erreur"))
+				// {
+				// 	JSONObject view  = new JSONObject(rep);
+				// 	String id = view.getString("id");
+				// 	String prenom = view.getString("prenom");
+				// 	String nom = view.getString("nom");
+				// 	console.setText("");
+				// 	console.append(" Elève : ID ; Prenom ; Nom \n");
+				// 	console.append(""+id+" ; "+ prenom +" ; "+ nom +"\n");
+				// }
+				// else
+				// {
+				// 	console.setText("");
+				// 	console.append("Erreur affichage vérfier l'éxitence de l'id\n");
+				// }
 
 
 			}
@@ -668,25 +713,25 @@ public class MainWindow {
 		vSujet.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				JSONObject req = new JSONObject();
-				req.put("id", idSujet.getText());
-				String rep = sess.getSujet(req.toString());
-				if (!rep.equals("erreur"))
-				{
-					JSONObject view  = new JSONObject(rep);
-					String id = view.getString("id");
-					String titre = view.getString("titre");
-					LocalTime fin = LocalTime.parse(view.getString("fin"));
-					LocalDate jour = LocalDate.parse(view.getString("jour"));
-					console.setText("");
-					console.append("Sujet : ID ; titre ; fin ; jour \n");
-					console.append(""+id+" ; "+ titre +" ; "+ fin +" ; "+jour +"\n");
-				}
-				else
-				{
-					console.setText("");
-					console.append("Erreur affichage vérfier l'exitence de l'id\n");
-				}
+				// JSONObject req = new JSONObject();
+				// req.put("id", idSujet.getText());
+				// String rep = sess.getSujet(req.toString());
+				// if (!rep.equals("erreur"))
+				// {
+				// 	JSONObject view  = new JSONObject(rep);
+				// 	String id = view.getString("id");
+				// 	String titre = view.getString("titre");
+				// 	LocalTime fin = LocalTime.parse(view.getString("fin"));
+				// 	LocalDate jour = LocalDate.parse(view.getString("jour"));
+				// 	console.setText("");
+				// 	console.append("Sujet : ID ; titre ; fin ; jour \n");
+				// 	console.append(""+id+" ; "+ titre +" ; "+ fin +" ; "+jour +"\n");
+				// }
+				// else
+				// {
+				// 	console.setText("");
+				// 	console.append("Erreur affichage vérfier l'exitence de l'id\n");
+				// }
 
 			}
 		});
@@ -699,28 +744,28 @@ public class MainWindow {
 		vUE.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				JSONObject req = new JSONObject();
-				req.put("id", idUE.getText());
-				String rep = sess.getUE(req.toString());
-				if (!rep.equals("erreur"))
-				{
-					JSONObject view  = new JSONObject(rep);
-					String id = view.getString("id");
-					String code = view.getString("code");
-					String intitule = view.getString("intitule");
-					float cours = Float.parseFloat(view.getString("cours"));
-					float td = Float.parseFloat(view.getString("td"));
-					float tp = Float.parseFloat(view.getString("tp"));
-					float valeur = Float.parseFloat(view.getString("valeur"));
-					console.setText("");
-					console.append("UE : ID;code ; intitule ; cours;td ; tp;valeur \n");
-					console.append(""+id+" ; "+ code +" ; "+ intitule +" ; "+cours +" ; "+td+ " ; "+ tp +" ; "+valeur+"\n");
-				}
-				else
-				{
-					console.setText("");
-					console.append("Erreur affichage vérfier l'exitence de l'id\n");
-				}
+				// JSONObject req = new JSONObject();
+				// req.put("id", idUE.getText());
+				// String rep = sess.getUE(req.toString());
+				// if (!rep.equals("erreur"))
+				// {
+				// 	JSONObject view  = new JSONObject(rep);
+				// 	String id = view.getString("id");
+				// 	String code = view.getString("code");
+				// 	String intitule = view.getString("intitule");
+				// 	float cours = Float.parseFloat(view.getString("cours"));
+				// 	float td = Float.parseFloat(view.getString("td"));
+				// 	float tp = Float.parseFloat(view.getString("tp"));
+				// 	float valeur = Float.parseFloat(view.getString("valeur"));
+				// 	console.setText("");
+				// 	console.append("UE : ID;code ; intitule ; cours;td ; tp;valeur \n");
+				// 	console.append(""+id+" ; "+ code +" ; "+ intitule +" ; "+cours +" ; "+td+ " ; "+ tp +" ; "+valeur+"\n");
+				// }
+				// else
+				// {
+				// 	console.setText("");
+				// 	console.append("Erreur affichage vérfier l'exitence de l'id\n");
+				// }
 			}
 		});
 		vUE.setBounds(303, 243, 135, 29);
@@ -732,15 +777,15 @@ public class MainWindow {
 		dSujet.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				String id = idSujet.getText();
-				JSONObject obj = new JSONObject();
-				obj.put("UUID", id);
-				console.setText("");
-				JSONObject objRet = new JSONObject(sess.deleteSujet(obj.toString()));
-				if (objRet.getString("result").equals("done"))
-					console.append("Sujet supprimé, id :"+ id);
-				else
-					console.append("Erreur suppression vérfier l'exitence de l'id");
+				// String id = idSujet.getText();
+				// JSONObject obj = new JSONObject();
+				// obj.put("UUID", id);
+				// console.setText("");
+				// JSONObject objRet = new JSONObject(sess.deleteSujet(obj.toString()));
+				// if (objRet.getString("result").equals("done"))
+				// 	console.append("Sujet supprimé, id :"+ id);
+				// else
+				// 	console.append("Erreur suppression vérfier l'exitence de l'id");
 				//TODO: This needs testing (not tested)
 			}
 		});
@@ -753,15 +798,15 @@ public class MainWindow {
 		dEleve.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				String id = idEleve.getText();
-				JSONObject obj = new JSONObject();
-				obj.put("UUID", id);
-				console.setText("");
-				JSONObject objRet = new JSONObject(sess.deleteEleve(obj.toString()));
-				if (objRet.getString("result").equals("done"))
-					console.append("Eleve supprimé, id :"+ id);
-				else
-					console.append("Erreur suppression vérfier l'exitence de l'id");
+				// String id = idEleve.getText();
+				// JSONObject obj = new JSONObject();
+				// obj.put("UUID", id);
+				// console.setText("");
+				// JSONObject objRet = new JSONObject(sess.deleteEleve(obj.toString()));
+				// if (objRet.getString("result").equals("done"))
+				// 	console.append("Eleve supprimé, id :"+ id);
+				// else
+				// 	console.append("Erreur suppression vérfier l'exitence de l'id");
 			}
 		});
 		dEleve.setBounds(436, 186, 158, 29);
@@ -773,31 +818,31 @@ public class MainWindow {
 		cUE.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				String co = code.getText();
-				String inti = intitule.getText();
-				String cou = cours.getText();
-				String TD = td.getText();
-				String TP = tp.getText();
-				String val = valeur.getText();
-				// Générez un ID unique entre 1 et 100 inclus
-				int randomId;
-				do {
-				    randomId = random.nextInt(100) + 1;
-				} while (!ueIds.add(randomId));
+				// String co = code.getText();
+				// String inti = intitule.getText();
+				// String cou = cours.getText();
+				// String TD = td.getText();
+				// String TP = tp.getText();
+				// String val = valeur.getText();
+				// // Générez un ID unique entre 1 et 100 inclus
+				// int randomId;
+				// do {
+				//     randomId = random.nextInt(100) + 1;
+				// } while (!ueIds.add(randomId));
 
-				// Convertissez le nombre en une chaîne
-				String id = Integer.toString(randomId);
-				JSONObject obj = new JSONObject();
-				obj.put("id", id);
-				obj.put("code", co);
-				obj.put("intitule", inti);
-				obj.put("cours", cou);
-				obj.put("td", TD);
-				obj.put("tp", TP);
-				obj.put("valeur", val);
-				console.setText("");
-				JSONObject objRet = new JSONObject(sess.createEU(obj.toString()));
-				console.append("UE cree, id :"+ objRet.getString("id"));
+				// // Convertissez le nombre en une chaîne
+				// String id = Integer.toString(randomId);
+				// JSONObject obj = new JSONObject();
+				// obj.put("id", id);
+				// obj.put("code", co);
+				// obj.put("intitule", inti);
+				// obj.put("cours", cou);
+				// obj.put("td", TD);
+				// obj.put("tp", TP);
+				// obj.put("valeur", val);
+				// console.setText("");
+				// JSONObject objRet = new JSONObject(sess.createEU(obj.toString()));
+				// console.append("UE cree, id :"+ objRet.getString("id"));
 
 			}
 		});
@@ -814,27 +859,27 @@ public class MainWindow {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				
-				// Convertissez le nombre en une chaîne
-				// Générez un ID unique entre 1 et 100 inclus
-				int randomId;
-				do {
-				    randomId = random.nextInt(100) + 1;
-				} while (!sujetIds.add(randomId));
+				// // Convertissez le nombre en une chaîne
+				// // Générez un ID unique entre 1 et 100 inclus
+				// int randomId;
+				// do {
+				//     randomId = random.nextInt(100) + 1;
+				// } while (!sujetIds.add(randomId));
 
-				// Convertissez le nombre en une chaîne
-				String id = Integer.toString(randomId);
-				String tit = titre.getText();
-				String fi = fin.getText();
-				String jo = jour.getText();
-				JSONObject obj = new JSONObject();
-				obj.put("id", id);
-				obj.put("titre", tit);
-				obj.put("fin", fi);
-				obj.put("jour", jo);
-				//TODO: Test this shit !
-				console.setText("");
-				JSONObject objRet = new JSONObject(sess.createSujet(obj.toString()));
-				console.append("Sujet crée, id :"+ objRet.getString("id"));
+				// // Convertissez le nombre en une chaîne
+				// String id = Integer.toString(randomId);
+				// String tit = titre.getText();
+				// String fi = fin.getText();
+				// String jo = jour.getText();
+				// JSONObject obj = new JSONObject();
+				// obj.put("id", id);
+				// obj.put("titre", tit);
+				// obj.put("fin", fi);
+				// obj.put("jour", jo);
+				// //TODO: Test this shit !
+				// console.setText("");
+				// JSONObject objRet = new JSONObject(sess.createSujet(obj.toString()));
+				// console.append("Sujet crée, id :"+ objRet.getString("id"));
 
 			}
 		});
@@ -847,23 +892,62 @@ public class MainWindow {
 		cEleve.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
+
+				// Créer une instance du client JAX-RS
+				Client client = ClientBuilder.newClient();
+
+				// Définir l'URL de la ressource
+				String apiUrl = "http://localhost:"+portServeur+"/Eleve/create"; // Remplacez par votre URL réelle
+				// Créer une instance de WebTarget pour l'URL de la ressource
+        		WebTarget target = client.target(apiUrl);
+
 				String p = prenom.getText();
 				String n = nom.getText();
 				// Générez un ID unique entre 1 et 100 inclus
-				int randomId;
-				do {
-				    randomId = random.nextInt(100) + 1;
-				} while (!eleveIds.add(randomId));
+				 int randomId;
+				 do {
+				     randomId = random.nextInt(100) + 1;
+				 } while (!eleveIds.add(randomId));
 
-				// Convertissez le nombre en une chaîne
-				String id = Integer.toString(randomId);
-				JSONObject obj = new JSONObject();
-				obj.put("id", id);
-				obj.put("prenom", p);
-				obj.put("nom", n);
-				console.setText("");
-				JSONObject objRet = new JSONObject(sess.createEleve(obj.toString()));
-				console.append("Eleve crée, id :"+ objRet.getString("id"));
+				Form form = new Form();
+				form.param("prenom", p);
+				form.param("nom", n);
+				form.param("id", String.valueOf(randomId));
+
+				// Envoyer la requête POST avec les données
+       			Response response = target
+                .request(MediaType.APPLICATION_JSON)
+                .post(Entity.entity(form, MediaType.APPLICATION_FORM_URLENCODED));
+				
+				// Traiter la réponse
+				if (response.getStatus() == 200) {
+
+					String resultat = response.readEntity(String.class);
+					JSONObject objRet = new JSONObject(resultat);
+					console.setText("");
+					console.append("Eleve crée, id :"+ objRet.getString("id"));
+				} else {
+					System.out.println("Erreur lors de la requête. Code : " + response.getStatus());
+				}
+				
+
+				// String p = prenom.getText();
+				// String n = nom.getText();
+				// // Générez un ID unique entre 1 et 100 inclus
+				// int randomId;
+				// do {
+				//     randomId = random.nextInt(100) + 1;
+				// } while (!eleveIds.add(randomId));
+
+				// // Convertissez le nombre en une chaîne
+				// String id = Integer.toString(randomId);
+				// JSONObject obj = new JSONObject();
+				// obj.put("id", id);
+				// obj.put("prenom", p);
+				// obj.put("nom", n);
+				// console.setText("");
+				// JSONObject objRet = new JSONObject(sess.createEleve(obj.toString()));
+				// console.append("Eleve crée, id :"+ objRet.getString("id"));
 
 			}
 		});
@@ -876,11 +960,28 @@ public class MainWindow {
 		lGroupe.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				String ls = sess.listGroupe();
-				JSONObject obj = new JSONObject(ls);
-				console.setText("");
-				console.append("Groupe : ID ; ID Eleve ;ID Sujet ; ID Ue \n");
-				console.append(obj.getString("response"));
+				String url = "http://localhost:"+portServeur+"/Groupe/list"; // Remplacez par votre endpoint réel
+
+				Client client = ClientBuilder.newClient();
+				Response response = client.target(url).request().get();
+
+				if (response.getStatus() == 200) {
+					String resultat = response.readEntity(String.class);
+					JSONObject obj = new JSONObject(resultat);
+					console.setText("");
+					console.append("Groupe : ID ; ID Eleve ;ID Sujet ; ID Ue \n");
+					console.append(obj.getString("response"));
+
+				} else {
+					System.out.println("Erreur lors de la requête. Code : " + response.getStatus());
+				}
+
+				client.close();
+				// String ls = sess.listGroupe();
+				// JSONObject obj = new JSONObject(ls);
+				// console.setText("");
+				// console.append("Groupe : ID ; ID Eleve ;ID Sujet ; ID Ue \n");
+				// console.append(obj.getString("response"));
 
 			}
 		});
@@ -893,11 +994,32 @@ public class MainWindow {
 		lEleve.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				String ls = sess.listEleve();
-				JSONObject obj = new JSONObject(ls);
-				console.setText("");
-				console.append("Elève : ID ;Prenom ; Nom \n");
-				console.append(obj.getString("response"));
+
+
+				String url = "http://localhost:"+portServeur+"/Eleve/list"; // Remplacez par votre endpoint réel
+
+				Client client = ClientBuilder.newClient();
+				Response response = client.target(url).request().get();
+
+				if (response.getStatus() == 200) {
+					String resultat = response.readEntity(String.class);
+					
+					JSONObject obj = new JSONObject(resultat);
+					console.setText("");
+					console.append("Elève : ID ;Prenom ; Nom \n");
+					console.append(obj.getString("response"));
+
+				} else {
+					System.out.println("Erreur lors de la requête. Code : " + response.getStatus());
+				}
+
+				client.close();
+
+				// String ls = sess.listEleve();
+				// JSONObject obj = new JSONObject(ls);
+				// console.setText("");
+				// console.append("Elève : ID ;Prenom ; Nom \n");
+				// console.append(obj.getString("response"));
 
 			}
 		});
@@ -910,11 +1032,28 @@ public class MainWindow {
 		lSujet.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				String ls = sess.listSujet();
-				JSONObject obj = new JSONObject(ls);
-				console.setText("");
-				console.append("Sujet : ID ; titre ;fin ; jour \n");
-				console.append(obj.getString("response"));
+				String url = "http://localhost:"+portServeur+"/Sujet/list"; // Remplacez par votre endpoint réel
+
+				Client client = ClientBuilder.newClient();
+				Response response = client.target(url).request().get();
+
+				if (response.getStatus() == 200) {
+					String resultat = response.readEntity(String.class);
+					JSONObject obj = new JSONObject(resultat);
+					console.setText("");
+					console.append("Sujet : ID ; titre ;fin ; jour \n");
+					console.append(obj.getString("response"));
+
+				} else {
+					System.out.println("Erreur lors de la requête. Code : " + response.getStatus());
+				}
+
+				client.close();
+				// String ls = sess.listSujet();
+				// JSONObject obj = new JSONObject(ls);
+				// console.setText("");
+				// console.append("Sujet : ID ; titre ;fin ; jour \n");
+				// console.append(obj.getString("response"));
 			}
 		});
 		lSujet.setBounds(317, 281, 127, 29);
@@ -926,11 +1065,29 @@ public class MainWindow {
 		lUE.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				String ls = sess.listEU();
-				JSONObject obj = new JSONObject(ls);
-				console.setText("");
-				console.append("UE : ID ; code ; intitule ;cours ; td ; tp ; valeur \n");
-				console.append(obj.getString("response"));
+
+				String url = "http://localhost:"+portServeur+"/UE/list"; // Remplacez par votre endpoint réel
+
+				Client client = ClientBuilder.newClient();
+				Response response = client.target(url).request().get();
+
+				if (response.getStatus() == 200) {
+					String resultat = response.readEntity(String.class);
+					JSONObject obj = new JSONObject(resultat);
+					console.setText("");
+					console.append("UE : ID ; code ; intitule ;cours ; td ; tp ; valeur \n");
+					console.append(obj.getString("response"));
+
+				} else {
+					System.out.println("Erreur lors de la requête. Code : " + response.getStatus());
+				}
+
+				client.close();
+				// String ls = sess.listEU();
+				// JSONObject obj = new JSONObject(ls);
+				// console.setText("");
+				// console.append("UE : ID ; code ; intitule ;cours ; td ; tp ; valeur \n");
+				// console.append(obj.getString("response"));
 			}
 		});
 		lUE.setBounds(467, 281, 127, 29);
