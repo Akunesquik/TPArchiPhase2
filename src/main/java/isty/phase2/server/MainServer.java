@@ -76,11 +76,9 @@ public class MainServer {
         @Consumes(MediaType.APPLICATION_FORM_URLENCODED)
         @Produces(MediaType.APPLICATION_JSON)
         public static String getEleve(@FormParam("id") String id) {
-            System.out.println("id trouve: "+id);
             JSONObject infos = new JSONObject();
             infos.put("id", id);
             String ls = sess.getEleve(infos.toString());
-            System.out.println("ls deduit: "+ls);
             return ls;
         }
 
@@ -102,6 +100,18 @@ public class MainServer {
                 return ls;
         }
 
+        
+        @POST
+        @Path("/delete")
+        @Consumes(MediaType.APPLICATION_FORM_URLENCODED)
+        @Produces(MediaType.APPLICATION_JSON)
+        public static String deleteEleve(@FormParam("id") String id) {
+            JSONObject infos = new JSONObject();
+            infos.put("id", id);
+            String ls = sess.deleteEleve(infos.toString());
+            return ls;
+        }
+
     }
 
     @Path("/Sujet")
@@ -112,7 +122,31 @@ public class MainServer {
             	String ls = sess.listSujet();
                 return ls;
         }
+
+        @POST
+        @Path("/search")
+        @Consumes(MediaType.APPLICATION_FORM_URLENCODED)
+        @Produces(MediaType.APPLICATION_JSON)
+        public static String getSujet(@FormParam("id") String id) {
+            JSONObject infos = new JSONObject();
+            infos.put("id", id);
+            String ls = sess.getSujet(infos.toString());
+            return ls;
+        }
+
+        
+        @POST
+        @Path("/delete")
+        @Consumes(MediaType.APPLICATION_FORM_URLENCODED)
+        @Produces(MediaType.APPLICATION_JSON)
+        public static String deleteSujet(@FormParam("id") String id) {
+            JSONObject infos = new JSONObject();
+            infos.put("id", id);
+            String ls = sess.deleteSujet(infos.toString());
+            return ls;
+        }
     }
+
     @Path("/Groupe")
     public static class GroupeResource {
         @GET
@@ -120,6 +154,17 @@ public class MainServer {
         public static String getGroupesList() {
             	String ls = sess.listGroupe();
                 return ls;
+        }
+
+        @POST
+        @Path("/search")
+        @Consumes(MediaType.APPLICATION_FORM_URLENCODED)
+        @Produces(MediaType.APPLICATION_JSON)
+        public static String getGroupe(@FormParam("id") String id) {
+            JSONObject infos = new JSONObject();
+            infos.put("id", id);
+            String ls = sess.getGroupe(infos.toString());
+            return ls;
         }
 
         @POST
@@ -138,6 +183,17 @@ public class MainServer {
                 String ls = sess.createEleve(obj.toString());
                 return ls;
         }
+
+        @POST
+        @Path("/delete")
+        @Consumes(MediaType.APPLICATION_FORM_URLENCODED)
+        @Produces(MediaType.APPLICATION_JSON)
+        public static String deleteGroupe(@FormParam("id") String id) {
+            JSONObject infos = new JSONObject();
+            infos.put("id", id);
+            String ls = sess.deleteGroupe(infos.toString());
+            return ls;
+        }
     }
     
     @Path("/UE")
@@ -147,6 +203,28 @@ public class MainServer {
         public static String getUEList() {
             	String ls = sess.listEU();
                 return ls;
+        }
+
+        @POST
+        @Path("/search")
+        @Consumes(MediaType.APPLICATION_FORM_URLENCODED)
+        @Produces(MediaType.APPLICATION_JSON)
+        public static String getUE(@FormParam("id") String id) {
+            JSONObject infos = new JSONObject();
+            infos.put("id", id);
+            String ls = sess.getUE(infos.toString());
+            return ls;
+        }
+
+        @POST
+        @Path("/delete")
+        @Consumes(MediaType.APPLICATION_FORM_URLENCODED)
+        @Produces(MediaType.APPLICATION_JSON)
+        public static String deleteUE(@FormParam("id") String id) {
+            JSONObject infos = new JSONObject();
+            infos.put("id", id);
+            String ls = sess.deleteEU(infos.toString());
+            return ls;
         }
     }
 

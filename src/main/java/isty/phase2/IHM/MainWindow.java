@@ -9,6 +9,9 @@ import java.awt.event.FocusEvent;
 import java.util.HashSet;
 import java.util.Random;
 import java.util.Set;
+import java.time.LocalTime;
+import java.time.LocalDate;
+
 
 import javax.swing.JButton;
 import javax.swing.JFormattedTextField;
@@ -554,9 +557,35 @@ public class MainWindow {
 		JButton vGroupe = new JButton("Afficher groupe");
 		vGroupe.addActionListener(new ActionListener() {
 			@Override
+
 			public void actionPerformed(ActionEvent e) {
+				// Créer une instance du client JAX-RS
+				Client client = ClientBuilder.newClient();
 
+				// Définir l'URL de la ressource
+				String apiUrl = "http://localhost:"+portServeur+"/Groupe/search"; // Remplacez par votre URL réelle
+				// Créer une instance de WebTarget pour l'URL de la ressource
+        		WebTarget target = client.target(apiUrl);
 
+				String idselect = idGroupe.getText().toString();
+				
+				Form form = new Form();
+				form.param("id",idselect);
+
+				// Envoyer la requête POST avec les données
+       			Response response = target
+                .request(MediaType.APPLICATION_JSON)
+                .post(Entity.entity(form, MediaType.APPLICATION_FORM_URLENCODED));
+				
+				// Traiter la réponse
+				if (response.getStatus() == 200) {
+					String resultat = response.readEntity(String.class);
+					console.setText(resultat);
+				} else {
+					System.out.println("Erreur lors de la requête. Code : " + response.getStatus());
+				}
+
+			}
 
 			// JSONObject req = new JSONObject();
 			// req.put("id", idGroupe.getText());
@@ -571,8 +600,6 @@ public class MainWindow {
 			// 	console.setText("");
 			// 	console.append("Erreur affichage vérifier l'exitence de l'id\n");
 			// }
-
-			}
 		});
 		vGroupe.setBounds(303, 157, 135, 29);
 		vGroupe.setForeground(Color.white);
@@ -655,7 +682,35 @@ public class MainWindow {
 		dUE.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
+				// Créer une instance du client JAX-RS
+				Client client = ClientBuilder.newClient();
 
+				// Définir l'URL de la ressource
+				String apiUrl = "http://localhost:"+portServeur+"/UE/delete"; // Remplacez par votre URL réelle
+				// Créer une instance de WebTarget pour l'URL de la ressource
+        		WebTarget target = client.target(apiUrl);
+
+				String idselect = idUE.getText().toString();
+				
+				Form form = new Form();
+				form.param("id",idselect);
+
+				// Envoyer la requête POST avec les données
+       			Response response = target
+                .request(MediaType.APPLICATION_JSON)
+                .post(Entity.entity(form, MediaType.APPLICATION_FORM_URLENCODED));
+				
+				
+				console.append(response.toString());
+				// Traiter la réponse
+				if (response.getStatus() == 200) {
+					String resultat = response.readEntity(String.class);
+					JSONObject view  = new JSONObject(resultat);
+					if (view.getString("result").equals("done"))
+						console.append("UE supprimée, id :"+ idselect);
+				} else {
+					System.out.println("Erreur lors de la requête. Code : " + response.getStatus());
+				}
 
 
 
@@ -749,6 +804,39 @@ public class MainWindow {
 		vSujet.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
+				// Créer une instance du client JAX-RS
+				Client client = ClientBuilder.newClient();
+
+				// Définir l'URL de la ressource
+				String apiUrl = "http://localhost:"+portServeur+"/Sujet/search"; // Remplacez par votre URL réelle
+				// Créer une instance de WebTarget pour l'URL de la ressource
+        		WebTarget target = client.target(apiUrl);
+
+				String idselect = idSujet.getText().toString();
+				
+				Form form = new Form();
+				form.param("id",idselect);
+
+				// Envoyer la requête POST avec les données
+       			Response response = target
+                .request(MediaType.APPLICATION_JSON)
+                .post(Entity.entity(form, MediaType.APPLICATION_FORM_URLENCODED));
+				
+				// Traiter la réponse
+				if (response.getStatus() == 200) {
+
+					String resultat = response.readEntity(String.class);
+					JSONObject view  = new JSONObject(resultat);
+				 	String id = view.getString("id");
+				 	String titre = view.getString("titre");
+				 	LocalTime fin = LocalTime.parse(view.getString("fin"));
+				 	LocalDate jour = LocalDate.parse(view.getString("jour"));
+				 	console.setText("");
+				 	console.append("Sujet : ID ; titre ; fin ; jour \n");
+				 	console.append(""+id+" ; "+ titre +" ; "+ fin +" ; "+jour +"\n");
+				} else {
+					System.out.println("Erreur lors de la requête. Code : " + response.getStatus());
+				}
 				// JSONObject req = new JSONObject();
 				// req.put("id", idSujet.getText());
 				// String rep = sess.getSujet(req.toString());
@@ -780,6 +868,42 @@ public class MainWindow {
 		vUE.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
+				// Créer une instance du client JAX-RS
+				Client client = ClientBuilder.newClient();
+
+				// Définir l'URL de la ressource
+				String apiUrl = "http://localhost:"+portServeur+"/UE/search"; // Remplacez par votre URL réelle
+				// Créer une instance de WebTarget pour l'URL de la ressource
+        		WebTarget target = client.target(apiUrl);
+
+				String idselect = idUE.getText().toString();
+				
+				Form form = new Form();
+				form.param("id",idselect);
+
+				// Envoyer la requête POST avec les données
+       			Response response = target
+                .request(MediaType.APPLICATION_JSON)
+                .post(Entity.entity(form, MediaType.APPLICATION_FORM_URLENCODED));
+				
+				// Traiter la réponse
+				if (response.getStatus() == 200) {
+					String resultat = response.readEntity(String.class);
+					JSONObject view  = new JSONObject(resultat);
+					String id = view.getString("id");
+					String code = view.getString("code");
+					String intitule = view.getString("intitule");
+					float cours = Float.parseFloat(view.getString("cours"));
+					float td = Float.parseFloat(view.getString("td"));
+					float tp = Float.parseFloat(view.getString("tp"));
+					float valeur = Float.parseFloat(view.getString("valeur"));
+					console.setText("");
+					console.append("UE : ID;code ; intitule ; cours;td ; tp;valeur \n");
+					console.append(""+id+" ; "+ code +" ; "+ intitule +" ; "+cours +" ; "+td+ " ; "+ tp +" ; "+valeur+"\n");
+				} else {
+					System.out.println("Erreur lors de la requête. Code : " + response.getStatus());
+				}
+
 				// JSONObject req = new JSONObject();
 				// req.put("id", idUE.getText());
 				// String rep = sess.getUE(req.toString());
