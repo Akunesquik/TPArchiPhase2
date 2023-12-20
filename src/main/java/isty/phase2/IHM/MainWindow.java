@@ -861,7 +861,6 @@ public class MainWindow {
        			Response response = target
                 .request(MediaType.APPLICATION_JSON)
                 .post(Entity.entity(form, MediaType.APPLICATION_FORM_URLENCODED));
-				
 				// Traiter la réponse
 				if (response.getStatus() == 200) {
 
@@ -948,7 +947,7 @@ public class MainWindow {
 					String resultat = response.readEntity(String.class);
 					JSONObject objRet = new JSONObject(resultat);
 					console.setText("");
-					console.append("Eleve crée, id :"+ objRet.getString("id"));
+					console.append("Sujet crée, id :"+ objRet.getString("id"));
 				} else {
 					System.out.println("Erreur lors de la requête. Code : " + response.getStatus());
 				}

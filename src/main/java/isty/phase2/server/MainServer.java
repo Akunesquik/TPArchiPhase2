@@ -155,8 +155,7 @@ public class MainServer {
         @Path("/create")
         @Consumes(MediaType.APPLICATION_FORM_URLENCODED)
         @Produces(MediaType.APPLICATION_JSON)
-        public static String createEleve(@FormParam("id") String id,@FormParam("code") String co,@FormParam("intitule") String inti,
-        @FormParam("cours") String cou,@FormParam("td") String TD,@FormParam("tp") String TP,@FormParam("valeur") String val) {
+        public static String createEleve(@FormParam("id") String id,@FormParam("code") String co,@FormParam("intitule") String inti,@FormParam("cours") String cou,@FormParam("td") String TD,@FormParam("tp") String TP,@FormParam("valeur") String val) {
             	
                 // Convertissez le nombre en une chaîne
 				

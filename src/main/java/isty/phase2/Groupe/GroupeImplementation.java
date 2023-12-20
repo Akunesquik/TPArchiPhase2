@@ -111,10 +111,10 @@ public class GroupeImplementation implements GroupeInterface {
 			System.out.println("Unexpected json file, should be: code,intitule,cours,td,tp,valeur");
 
 		}
+		
 		UniteEnseignement UE = new UniteEnseignement(id, code, intitule, cours, td, tp, valeur);
 
 		UE.save();
-
 		String ret = "{ \"id\": \"" + id + "\"}";
 
 		return ret;
