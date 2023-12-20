@@ -887,6 +887,23 @@ public class MainWindow {
 		lGroupe.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
+				String url = "http://localhost:"+portServeur+"/Groupe/list"; // Remplacez par votre endpoint réel
+
+				Client client = ClientBuilder.newClient();
+				Response response = client.target(url).request().get();
+
+				if (response.getStatus() == 200) {
+					String resultat = response.readEntity(String.class);
+					JSONObject obj = new JSONObject(resultat);
+					console.setText("");
+					console.append("Groupe : ID ; ID Eleve ;ID Sujet ; ID Ue \n");
+					console.append(obj.getString("response"));
+
+				} else {
+					System.out.println("Erreur lors de la requête. Code : " + response.getStatus());
+				}
+
+				client.close();
 				// String ls = sess.listGroupe();
 				// JSONObject obj = new JSONObject(ls);
 				// console.setText("");
@@ -941,6 +958,23 @@ public class MainWindow {
 		lSujet.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
+				String url = "http://localhost:"+portServeur+"/Sujet/list"; // Remplacez par votre endpoint réel
+
+				Client client = ClientBuilder.newClient();
+				Response response = client.target(url).request().get();
+
+				if (response.getStatus() == 200) {
+					String resultat = response.readEntity(String.class);
+					JSONObject obj = new JSONObject(resultat);
+					console.setText("");
+					console.append("Sujet : ID ; titre ;fin ; jour \n");
+					console.append(obj.getString("response"));
+
+				} else {
+					System.out.println("Erreur lors de la requête. Code : " + response.getStatus());
+				}
+
+				client.close();
 				// String ls = sess.listSujet();
 				// JSONObject obj = new JSONObject(ls);
 				// console.setText("");
@@ -957,6 +991,24 @@ public class MainWindow {
 		lUE.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
+
+				String url = "http://localhost:"+portServeur+"/UE/list"; // Remplacez par votre endpoint réel
+
+				Client client = ClientBuilder.newClient();
+				Response response = client.target(url).request().get();
+
+				if (response.getStatus() == 200) {
+					String resultat = response.readEntity(String.class);
+					JSONObject obj = new JSONObject(resultat);
+					console.setText("");
+					console.append("UE : ID ; code ; intitule ;cours ; td ; tp ; valeur \n");
+					console.append(obj.getString("response"));
+
+				} else {
+					System.out.println("Erreur lors de la requête. Code : " + response.getStatus());
+				}
+
+				client.close();
 				// String ls = sess.listEU();
 				// JSONObject obj = new JSONObject(ls);
 				// console.setText("");

@@ -25,7 +25,7 @@ public class MainServer {
     	ServerConfig.configCheck();
     	ServerConfig conf = ServerConfig.loadConfig();
         URI baseUri = UriBuilder.fromUri(conf.getAdress()).port(conf.getPort()).build();
-        ResourceConfig config = new ResourceConfig(EleveResource.class);
+        ResourceConfig config = new ResourceConfig(EleveResource.class,SujetResource.class,GroupeResource.class,UEResource.class);
         JdkHttpServerFactory.createHttpServer(baseUri, config);
         System.out.println("Server started at " + baseUri);
 
@@ -59,6 +59,35 @@ public class MainServer {
         @Path("/list")
         public static String getEleveList() {
             	String ls = sess.listEleve();
+                return ls;
+        }
+    }
+
+    @Path("/Sujet")
+    public static class SujetResource {
+        @GET
+        @Path("/list")
+        public static String getSujetList() {
+            	String ls = sess.listSujet();
+                return ls;
+        }
+    }
+    @Path("/Groupe")
+    public static class GroupeResource {
+        @GET
+        @Path("/list")
+        public static String getGroupesList() {
+            	String ls = sess.listGroupe();
+                return ls;
+        }
+    }
+    
+    @Path("/UE")
+    public static class UEResource {
+        @GET
+        @Path("/list")
+        public static String getUEList() {
+            	String ls = sess.listEU();
                 return ls;
         }
     }
