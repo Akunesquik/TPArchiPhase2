@@ -32,7 +32,7 @@ public class MainServer {
     	ServerConfig.configCheck();
     	ServerConfig conf = ServerConfig.loadConfig();
         URI baseUri = UriBuilder.fromUri(conf.getAdress()).port(conf.getPort()).build();
-        ResourceConfig config = new ResourceConfig(EleveResource.class,SujetResource.class,GroupeResource.class,UEResource.class);
+        ResourceConfig config = new ResourceConfig(HelloWorldResource.class,EleveResource.class,SujetResource.class,GroupeResource.class,UEResource.class);
         JdkHttpServerFactory.createHttpServer(baseUri, config);
         System.out.println("Server started at " + baseUri);
 
@@ -103,6 +103,23 @@ public class MainServer {
         @Path("/list")
         public static String getGroupesList() {
             	String ls = sess.listGroupe();
+                return ls;
+        }
+
+        @POST
+        @Path("/create")
+        @Consumes(MediaType.APPLICATION_FORM_URLENCODED)
+        @Produces(MediaType.APPLICATION_JSON)
+        public static String createGroupe(@FormParam("prenom") String p, @FormParam("nom") String n,@FormParam("id") String id ) {
+            	
+                // Convertissez le nombre en une chaîne
+				
+				JSONObject obj = new JSONObject();
+				obj.put("id", id);
+				obj.put("prenom", p);
+				obj.put("nom", n);
+
+                String ls = sess.createEleve(obj.toString());
                 return ls;
         }
     }
