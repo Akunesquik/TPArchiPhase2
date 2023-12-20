@@ -35,7 +35,7 @@ import org.json.JSONObject;
 public class MainWindow {
 	private static Logger logger = Logger.getLogger(MainWindow.class.getSimpleName());
 	public JFrame frame;
-
+	ClientConfig clientConfig;
 	/**
 	 * Create the application.
 	 */
@@ -47,10 +47,9 @@ public class MainWindow {
 	/**
 	 * Initialize the contents of the frame.
 	 */
-	private void initialize(GroupeImplementation sess) {
+	private void initialize() {
 		ClientConfig.configCheck();
-		ClientConfig clientConfig = ClientConfig.loadConfig();
-		int portServeur = clientConfig.getPort();
+		clientConfig = ClientConfig.loadConfig();
 
 		frame = new JFrame();
 		frame.setBounds(100, 100, 600, 600);
@@ -524,7 +523,7 @@ public class MainWindow {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 
-				String url = "http://localhost:" + portServeur + "/hello"; // Remplacez par votre endpoint réel
+				String url = clientConfig.getURL() + "hello"; // Remplacez par votre endpoint réel
 
 				Client client = ClientBuilder.newClient();
 				Response response = client.target(url).request().get();
@@ -600,7 +599,7 @@ public class MainWindow {
 				Client client = ClientBuilder.newClient();
 
 				// Définir l'URL de la ressource
-				String apiUrl = "http://localhost:" + portServeur + "/Groupe/create"; // Remplacez par votre URL réelle
+				String apiUrl = clientConfig.getURL() + "Groupe/create"; // Remplacez par votre URL réelle
 				// Créer une instance de WebTarget pour l'URL de la ressource
 				WebTarget target = client.target(apiUrl);
 
@@ -829,7 +828,7 @@ public class MainWindow {
 				Client client = ClientBuilder.newClient();
 
 				// Définir l'URL de la ressource
-				String apiUrl = "http://localhost:"+portServeur+"/UE/create"; // Remplacez par votre URL réelle
+				String apiUrl = clientConfig.getURL() +"UE/create"; // Remplacez par votre URL réelle
 				// Créer une instance de WebTarget pour l'URL de la ressource
         		WebTarget target = client.target(apiUrl);
 
@@ -868,7 +867,7 @@ public class MainWindow {
 					console.setText("");
 					console.append("UE cree, id :"+ objRet.getString("id"));
 				} else {
-					System.out.println("Erreur lors de la requête. Code : " + response.getStatus());
+					logger.warning("Erreur lors de la requête. Code : " + response.getStatus());
 				}
 				
 				// String co = code.getText();
@@ -913,7 +912,7 @@ public class MainWindow {
 				Client client = ClientBuilder.newClient();
 
 				// Définir l'URL de la ressource
-				String apiUrl = "http://localhost:"+portServeur+"/Sujet/create"; // Remplacez par votre URL réelle
+				String apiUrl = clientConfig.getURL() + "Sujet/create"; // Remplacez par votre URL réelle
 				// Créer une instance de WebTarget pour l'URL de la ressource
         		WebTarget target = client.target(apiUrl);
 
@@ -948,7 +947,7 @@ public class MainWindow {
 					console.setText("");
 					console.append("Sujet crée, id :"+ objRet.getString("id"));
 				} else {
-					System.out.println("Erreur lors de la requête. Code : " + response.getStatus());
+					logger.warning("Erreur lors de la requête. Code : " + response.getStatus());
 				}
 				
 				client.close();
@@ -990,7 +989,7 @@ public class MainWindow {
 				Client client = ClientBuilder.newClient();
 
 				// Définir l'URL de la ressource
-				String apiUrl = "http://localhost:" + portServeur + "/Eleve/create"; // Remplacez par votre URL réelle
+				String apiUrl = clientConfig.getURL() + "Eleve/create"; // Remplacez par votre URL réelle
 				// Créer une instance de WebTarget pour l'URL de la ressource
 				WebTarget target = client.target(apiUrl);
 
@@ -1054,7 +1053,7 @@ public class MainWindow {
 		lGroupe.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				String url = "http://localhost:" + portServeur + "/Groupe/list"; // Remplacez par votre endpoint réel
+				String url = clientConfig.getURL() + "Groupe/list"; // Remplacez par votre endpoint réel
 
 				Client client = ClientBuilder.newClient();
 				Response response = client.target(url).request().get();
@@ -1089,7 +1088,7 @@ public class MainWindow {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 
-				String url = "http://localhost:" + portServeur + "/Eleve/list"; // Remplacez par votre endpoint réel
+				String url = clientConfig.getURL() + "Eleve/list"; // Remplacez par votre endpoint réel
 
 				Client client = ClientBuilder.newClient();
 				Response response = client.target(url).request().get();
@@ -1125,7 +1124,7 @@ public class MainWindow {
 		lSujet.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				String url = "http://localhost:" + portServeur + "/Sujet/list"; // Remplacez par votre endpoint réel
+				String url = clientConfig.getURL() + "Sujet/list"; // Remplacez par votre endpoint réel
 
 				Client client = ClientBuilder.newClient();
 				Response response = client.target(url).request().get();
@@ -1159,7 +1158,7 @@ public class MainWindow {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 
-				String url = "http://localhost:" + portServeur + "/UE/list"; // Remplacez par votre endpoint réel
+				String url = clientConfig.getURL() +"UE/list"; // Remplacez par votre endpoint réel
 
 				Client client = ClientBuilder.newClient();
 				Response response = client.target(url).request().get();

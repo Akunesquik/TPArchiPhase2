@@ -4,6 +4,7 @@ import isty.phase2.Groupe.GroupeImplementation;
 import isty.phase2.server.ServerConfig;
 
 import java.util.logging.Logger;
+import com.sun.net.httpserver.HttpServer;
 import org.glassfish.jersey.jdkhttp.JdkHttpServerFactory;
 import org.glassfish.jersey.server.ResourceConfig;
 
@@ -24,6 +25,7 @@ public class MainServer {
 	private static Logger logger = Logger.getLogger(MainServer.class.getSimpleName());
 
 	private static GroupeImplementation sess = new GroupeImplementation();
+	private static HttpServer server;
 
 	public static void main(String[] args) {
 		MainServer mainServer = new MainServer();
@@ -36,10 +38,15 @@ public class MainServer {
 		URI baseUri = UriBuilder.fromUri(serverConf.getAdress()).port(serverConf.getPort()).build();
 		ResourceConfig config = new ResourceConfig(HelloWorldResource.class, EleveResource.class, SujetResource.class,
 				GroupeResource.class, UEResource.class);
-		JdkHttpServerFactory.createHttpServer(baseUri, config);
-		logger.info("Server started at " + baseUri);
+		server = JdkHttpServerFactory.createHttpServer(baseUri, config);
+		logger.info("Server started at " + serverConf.getURL());
 
 		initDatabase(sess);
+		Runtime.getRuntime().addShutdownHook(new Thread(() -> {
+			logger.info("Fermeture du serveur...");
+			server.stop(0);
+			logger.info("Serveur fermé.");
+		}));
 	}
 
 	public void initDatabase(GroupeImplementation sess) {
@@ -79,89 +86,108 @@ public class MainServer {
 		public static String createEleve(@FormParam("prenom") String p, @FormParam("nom") String n,
 				@FormParam("id") String id) {
 
-    @Path("/Sujet")
-    public static class SujetResource {
-        @GET
-        @Path("/list")
-        public static String getSujetList() {
-            	String ls = sess.listSujet();
-                return ls;
-        }
-        @POST
-        @Path("/create")
-        @Consumes(MediaType.APPLICATION_FORM_URLENCODED)
-        @Produces(MediaType.APPLICATION_JSON)
-        public static String createGroupe(@FormParam("id") String id,@FormParam("titre") String tit, @FormParam("fin") String fi,@FormParam("jour") String jo ) {
-            	
-                // Convertissez le nombre en une chaîne
-				
-				JSONObject obj = new JSONObject();
-				obj.put("id", id);
-				obj.put("titre", tit);
-				obj.put("fin", fi);
-				obj.put("jour", jo);
+			// Convertissez le nombre en une chaîne
 
-                String ls = sess.createSujet(obj.toString());
-                return ls;
-        }
-    }
-    @Path("/Groupe")
-    public static class GroupeResource {
-        @GET
-        @Path("/list")
-        public static String getGroupesList() {
-            	String ls = sess.listGroupe();
-                return ls;
-        }
+			JSONObject obj = new JSONObject();
+			obj.put("id", id);
+			obj.put("prenom", p);
+			obj.put("nom", n);
 
-        @POST
-        @Path("/create")
-        @Consumes(MediaType.APPLICATION_FORM_URLENCODED)
-        @Produces(MediaType.APPLICATION_JSON)
-        public static String createGroupe(@FormParam("id") String id,@FormParam("iEU") String iue, @FormParam("iEleve") String iel,@FormParam("iSujet") String isu ) {
-            	
-                // Convertissez le nombre en une chaîne
-				
-				JSONObject obj = new JSONObject();
-				obj.put("id", id);
-				obj.put("ueID", iue);
-				obj.put("eleveID", iel);
-				obj.put("sujetID", isu);
+			String ls = sess.createEleve(obj.toString());
+			return ls;
+		}
 
-                String ls = sess.createGroupe(obj.toString());
-                return ls;
-        }
-    }
-    
-    @Path("/UE")
-    public static class UEResource {
-        @GET
-        @Path("/list")
-        public static String getUEList() {
-            	String ls = sess.listEU();
-                return ls;
-        }
+	}
 
-        @POST
-        @Path("/create")
-        @Consumes(MediaType.APPLICATION_FORM_URLENCODED)
-        @Produces(MediaType.APPLICATION_JSON)
-        public static String createEleve(@FormParam("id") String id,@FormParam("code") String co,@FormParam("intitule") String inti,@FormParam("cours") String cou,@FormParam("td") String TD,@FormParam("tp") String TP,@FormParam("valeur") String val) {
-            	
-                // Convertissez le nombre en une chaîne
-				
-				JSONObject obj = new JSONObject();
-				obj.put("id", id);
-				obj.put("code", co);
-				obj.put("intitule", inti);
-				obj.put("cours", cou);
-				obj.put("td", TD);
-				obj.put("tp", TP);
-				obj.put("valeur", val);
+	@Path("/Sujet")
+	public static class SujetResource {
+		@GET
+		@Path("/list")
+		public static String getSujetList() {
+			String ls = sess.listSujet();
+			return ls;
+		}
 
-                String ls = sess.createEU(obj.toString());
-                return ls;
-        }
-    }
+		@POST
+		@Path("/create")
+		@Consumes(MediaType.APPLICATION_FORM_URLENCODED)
+		@Produces(MediaType.APPLICATION_JSON)
+		public static String createGroupe(@FormParam("id") String id, @FormParam("titre") String tit,
+				@FormParam("fin") String fi, @FormParam("jour") String jo) {
+
+			// Convertissez le nombre en une chaîne
+
+			JSONObject obj = new JSONObject();
+			obj.put("id", id);
+			obj.put("titre", tit);
+			obj.put("fin", fi);
+			obj.put("jour", jo);
+
+			String ls = sess.createSujet(obj.toString());
+			return ls;
+		}
+	}
+
+	@Path("/Groupe")
+	public static class GroupeResource {
+		@GET
+		@Path("/list")
+		public static String getGroupesList() {
+			String ls = sess.listGroupe();
+			return ls;
+		}
+
+		@POST
+		@Path("/create")
+		@Consumes(MediaType.APPLICATION_FORM_URLENCODED)
+		@Produces(MediaType.APPLICATION_JSON)
+		public static String createGroupe(@FormParam("id") String id, @FormParam("iEU") String iue,
+				@FormParam("iEleve") String iel, @FormParam("iSujet") String isu) {
+
+			// Convertissez le nombre en une chaîne
+
+			JSONObject obj = new JSONObject();
+			obj.put("id", id);
+			obj.put("ueID", iue);
+			obj.put("eleveID", iel);
+			obj.put("sujetID", isu);
+
+			String ls = sess.createGroupe(obj.toString());
+			return ls;
+		}
+	}
+
+	@Path("/UE")
+	public static class UEResource {
+		@GET
+		@Path("/list")
+		public static String getUEList() {
+			String ls = sess.listEU();
+			return ls;
+		}
+
+		@POST
+		@Path("/create")
+		@Consumes(MediaType.APPLICATION_FORM_URLENCODED)
+		@Produces(MediaType.APPLICATION_JSON)
+		public static String createEleve(@FormParam("id") String id, @FormParam("code") String co,
+				@FormParam("intitule") String inti, @FormParam("cours") String cou, @FormParam("td") String TD,
+				@FormParam("tp") String TP, @FormParam("valeur") String val) {
+
+			// Convertissez le nombre en une chaîne
+
+			JSONObject obj = new JSONObject();
+			obj.put("id", id);
+			obj.put("code", co);
+			obj.put("intitule", inti);
+			obj.put("cours", cou);
+			obj.put("td", TD);
+			obj.put("tp", TP);
+			obj.put("valeur", val);
+
+			String ls = sess.createEU(obj.toString());
+			return ls;
+		}
+	}
 
 }
