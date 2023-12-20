@@ -14,6 +14,7 @@ import javax.ws.rs.GET;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
+import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.UriBuilder;
 import java.net.URI;
 
@@ -21,6 +22,7 @@ import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import org.json.JSONObject;
 
+//branche louis
 public class MainServer {
 	private static Logger logger = Logger.getLogger(MainServer.class.getSimpleName());
 
@@ -79,7 +81,7 @@ public class MainServer {
 			return ls;
 		}
 
-		@POST
+        @POST
 		@Path("/create")
 		@Consumes(MediaType.APPLICATION_FORM_URLENCODED)
 		@Produces(MediaType.APPLICATION_JSON)
@@ -97,18 +99,41 @@ public class MainServer {
 			return ls;
 		}
 
-	}
+        @POST
+        @Path("/search")
+        @Consumes(MediaType.APPLICATION_FORM_URLENCODED)
+        @Produces(MediaType.APPLICATION_JSON)
+        public static String getUE(@FormParam("id") String id) {
+            JSONObject infos = new JSONObject();
+            infos.put("id", id);
+            String ls = sess.getUE(infos.toString());
+            return ls;
+        }
 
-	@Path("/Sujet")
-	public static class SujetResource {
-		@GET
-		@Path("/list")
-		public static String getSujetList() {
-			String ls = sess.listSujet();
-			return ls;
-		}
+        
+        @POST
+        @Path("/delete")
+        @Consumes(MediaType.APPLICATION_FORM_URLENCODED)
+        @Produces(MediaType.APPLICATION_JSON)
+        public static String deleteEleve(@FormParam("id") String id) {
+            JSONObject infos = new JSONObject();
+            infos.put("UUID", id);
+            String ls = sess.deleteEleve(infos.toString());
+            return ls;
+        }
 
-		@POST
+    }
+
+    @Path("/Sujet")
+    public static class SujetResource {
+        @GET
+        @Path("/list")
+        public static String getSujetList() {
+            	String ls = sess.listSujet();
+                return ls;
+        }
+
+        @POST
 		@Path("/create")
 		@Consumes(MediaType.APPLICATION_FORM_URLENCODED)
 		@Produces(MediaType.APPLICATION_JSON)
@@ -126,51 +151,94 @@ public class MainServer {
 			String ls = sess.createSujet(obj.toString());
 			return ls;
 		}
-	}
 
-	@Path("/Groupe")
-	public static class GroupeResource {
-		@GET
-		@Path("/list")
-		public static String getGroupesList() {
-			String ls = sess.listGroupe();
-			return ls;
-		}
+        @POST
+        @Path("/search")
+        @Consumes(MediaType.APPLICATION_FORM_URLENCODED)
+        @Produces(MediaType.APPLICATION_JSON)
+        public static String getEleve(@FormParam("id") String id) {
+            JSONObject infos = new JSONObject();
+            infos.put("id", id);
+            String ls = sess.getEleve(infos.toString());
+            return ls;
+        }
 
-		@POST
+        
+        @POST
+        @Path("/delete")
+        @Consumes(MediaType.APPLICATION_FORM_URLENCODED)
+        @Produces(MediaType.APPLICATION_JSON)
+        public static String deleteSujet(@FormParam("id") String id) {
+            JSONObject infos = new JSONObject();
+            infos.put("UUID", id);
+            String ls = sess.deleteSujet(infos.toString());
+            return ls;
+        }
+    }
+
+    @Path("/Groupe")
+    public static class GroupeResource {
+        @GET
+        @Path("/list")
+        public static String getGroupesList() {
+            	String ls = sess.listGroupe();
+                return ls;
+        }
+
+        @POST
+        @Path("/search")
+        @Consumes(MediaType.APPLICATION_FORM_URLENCODED)
+        @Produces(MediaType.APPLICATION_JSON)
+        public static String getGroupe(@FormParam("id") String id) {
+            JSONObject infos = new JSONObject();
+            infos.put("id", id);
+            String ls = sess.getGroupe(infos.toString());
+            return ls;
+        }
+
+        @POST
+        @Path("/create")
+        @Consumes(MediaType.APPLICATION_FORM_URLENCODED)
+        @Produces(MediaType.APPLICATION_JSON)
+        public static String createGroupe(@FormParam("id") String id,@FormParam("iEU") String iue, @FormParam("iEleve") String iel,@FormParam("iSujet") String isu ) {
+                
+                // Convertissez le nombre en une chaîne
+                
+                JSONObject obj = new JSONObject();
+                obj.put("id", id);
+                obj.put("ueID", iue);
+                obj.put("eleveID", iel);
+                obj.put("sujetID", isu);
+
+                String ls = sess.createGroupe(obj.toString());
+                return ls;
+        }
+
+        @POST
+        @Path("/delete")
+        @Consumes(MediaType.APPLICATION_FORM_URLENCODED)
+        @Produces(MediaType.APPLICATION_JSON)
+        public static String deleteGroupe(@FormParam("id") String id) {
+            JSONObject infos = new JSONObject();
+            infos.put("UUID", id);
+            String ls = sess.deleteGroupe(infos.toString());
+            return ls;
+        }
+    }
+  
+    @Path("/UE")
+    public static class UEResource {
+        @GET
+        @Path("/list")
+        public static String getUEList() {
+            	String ls = sess.listEU();
+                return ls;
+        }
+        @POST
 		@Path("/create")
 		@Consumes(MediaType.APPLICATION_FORM_URLENCODED)
 		@Produces(MediaType.APPLICATION_JSON)
-		public static String createGroupe(@FormParam("id") String id, @FormParam("iEU") String iue,
-				@FormParam("iEleve") String iel, @FormParam("iSujet") String isu) {
-
-			// Convertissez le nombre en une chaîne
-
-			JSONObject obj = new JSONObject();
-			obj.put("id", id);
-			obj.put("ueID", iue);
-			obj.put("eleveID", iel);
-			obj.put("sujetID", isu);
-
-			String ls = sess.createGroupe(obj.toString());
-			return ls;
-		}
-	}
-
-	@Path("/UE")
-	public static class UEResource {
-		@GET
-		@Path("/list")
-		public static String getUEList() {
-			String ls = sess.listEU();
-			return ls;
-		}
-
-		@POST
-		@Path("/create")
-		@Consumes(MediaType.APPLICATION_FORM_URLENCODED)
-		@Produces(MediaType.APPLICATION_JSON)
-		public static String createEleve(@FormParam("id") String id, @FormParam("code") String co,
+		public static String createUE(@FormParam("id") String id, @FormParam("code") String co,
 				@FormParam("intitule") String inti, @FormParam("cours") String cou, @FormParam("td") String TD,
 				@FormParam("tp") String TP, @FormParam("valeur") String val) {
 
@@ -188,6 +256,27 @@ public class MainServer {
 			String ls = sess.createEU(obj.toString());
 			return ls;
 		}
-	}
 
+        @POST
+        @Path("/search")
+        @Consumes(MediaType.APPLICATION_FORM_URLENCODED)
+        @Produces(MediaType.APPLICATION_JSON)
+        public static String getUE(@FormParam("id") String id) {
+            JSONObject infos = new JSONObject();
+            infos.put("id", id);
+            String ls = sess.getUE(infos.toString());
+            return ls;
+        }
+
+        @POST
+        @Path("/delete")
+        @Consumes(MediaType.APPLICATION_FORM_URLENCODED)
+        @Produces(MediaType.APPLICATION_JSON)
+        public static String deleteUE(@FormParam("id") String id) {
+            JSONObject infos = new JSONObject();
+            infos.put("UUID", id);
+            String ls = sess.deleteEU(infos.toString());
+            return ls;
+        }
+    }
 }

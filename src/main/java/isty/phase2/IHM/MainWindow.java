@@ -14,6 +14,10 @@ import java.util.HashSet;
 import java.util.Random;
 import java.util.Set;
 import java.util.logging.Logger;
+import java.time.LocalTime;
+import java.time.LocalDate;
+
+
 import javax.swing.JButton;
 import javax.swing.JFormattedTextField;
 import javax.swing.JFrame;
@@ -48,8 +52,10 @@ public class MainWindow {
 	 * Initialize the contents of the frame.
 	 */
 	private void initialize() {
+
 		ClientConfig.configCheck();
 		clientConfig = ClientConfig.loadConfig();
+		int portServeur = clientConfig.getPort();
 
 		frame = new JFrame();
 		frame.setBounds(100, 100, 600, 600);
@@ -520,37 +526,61 @@ public class MainWindow {
 		 */
 		JButton dGroupe = new JButton("Supprimer groupe");
 		dGroupe.addActionListener(new ActionListener() {
-			@Override
-			public void actionPerformed(ActionEvent e) {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                
+                Client client = ClientBuilder.newClient();
 
-				String url = clientConfig.getURL() + "hello"; // Remplacez par votre endpoint réel
+				// Définir l'URL de la ressource
+				String apiUrl = "http://localhost:"+portServeur+"/Groupe/delete"; // Remplacez par votre URL réelle
+				// Créer une instance de WebTarget pour l'URL de la ressource
+        		WebTarget target = client.target(apiUrl);
 
-				Client client = ClientBuilder.newClient();
-				Response response = client.target(url).request().get();
+				String idselect = idGroupe.getText().toString();
 
+				Form form = new Form();
+				form.param("id",idselect);
+
+
+                Response response = target
+                .request(MediaType.APPLICATION_JSON)
+                .post(Entity.entity(form, MediaType.APPLICATION_FORM_URLENCODED));
+
+
+				// Traiter la réponse
 				if (response.getStatus() == 200) {
+					console.setText("");
 					String resultat = response.readEntity(String.class);
-					System.out.println("Réponse du serveur : " + resultat);
+					JSONObject view  = new JSONObject(resultat);
+					if (view.getString("result").equals("done")){
+						console.append("Groupe supprimée, id :"+ idselect);
+					}
+
 				} else {
 					System.out.println("Erreur lors de la requête. Code : " + response.getStatus());
 				}
 
 				client.close();
+                
 
-			}
-			/*
-			 * @Override public void actionPerformed(ActionEvent e) { String id =
-			 * idGroupe.getText(); JSONObject obj = new JSONObject(); obj.put("UUID", id);
-			 * console.setText(""); JSONObject objRet = new
-			 * JSONObject(sess.deleteGroupe(obj.toString())); if
-			 * (objRet.getString("result").equals("done"))
-			 * console.append("groupe supprimé, id :"+ id); else
-			 * console.append("Erreur suppression vérifier l'exitence de l'id");
-			 * 
-			 * 
-			 * }
-			 */
-		});
+            }
+            /*
+             * @Override
+            public void actionPerformed(ActionEvent e) {
+                String id = idGroupe.getText();
+                JSONObject obj = new JSONObject();
+                obj.put("UUID", id);
+                console.setText("");
+                JSONObject objRet = new JSONObject(sess.deleteGroupe(obj.toString()));
+                if (objRet.getString("result").equals("done"))
+                    console.append("groupe supprimé, id :"+ id);
+                else
+                    console.append("Erreur suppression vérifier l'exitence de l'id");
+                
+
+            }
+            */
+        });
 		dGroupe.setBounds(436, 157, 158, 29);
 		dGroupe.setForeground(Color.white);
 		dGroupe.setBackground(Color.DARK_GRAY);
@@ -559,23 +589,49 @@ public class MainWindow {
 		JButton vGroupe = new JButton("Afficher groupe");
 		vGroupe.addActionListener(new ActionListener() {
 			@Override
+
 			public void actionPerformed(ActionEvent e) {
+				// Créer une instance du client JAX-RS
+				Client client = ClientBuilder.newClient();
 
-				// JSONObject req = new JSONObject();
-				// req.put("id", idGroupe.getText());
-				// String rep = sess.getGroupe(req.toString());
-				// if (!rep.equals("erreur"))
-				// {
+				// Définir l'URL de la ressource
+				String apiUrl = "http://localhost:"+portServeur+"/Groupe/search"; // Remplacez par votre URL réelle
+				// Créer une instance de WebTarget pour l'URL de la ressource
+        		WebTarget target = client.target(apiUrl);
 
-				// console.setText(rep);
-				// }
-				// else
-				// {
-				// console.setText("");
-				// console.append("Erreur affichage vérifier l'exitence de l'id\n");
-				// }
+				String idselect = idGroupe.getText().toString();
+				
+				Form form = new Form();
+				form.param("id",idselect);
+
+				// Envoyer la requête POST avec les données
+       			Response response = target
+                .request(MediaType.APPLICATION_JSON)
+                .post(Entity.entity(form, MediaType.APPLICATION_FORM_URLENCODED));
+				
+				// Traiter la réponse
+				if (response.getStatus() == 200) {
+					String resultat = response.readEntity(String.class);
+					console.setText(resultat);
+				} else {
+					System.out.println("Erreur lors de la requête. Code : " + response.getStatus());
+				}
 
 			}
+
+			// JSONObject req = new JSONObject();
+			// req.put("id", idGroupe.getText());
+			// String rep = sess.getGroupe(req.toString());
+			// if (!rep.equals("erreur"))
+			// {
+	
+			// console.setText(rep);
+			// }
+			// else
+			// {
+			// 	console.setText("");
+			// 	console.append("Erreur affichage vérifier l'exitence de l'id\n");
+			// }
 		});
 		vGroupe.setBounds(303, 157, 135, 29);
 		vGroupe.setForeground(Color.white);
@@ -665,6 +721,41 @@ public class MainWindow {
 		dUE.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
+				// Créer une instance du client JAX-RS
+				Client client = ClientBuilder.newClient();
+
+				// Définir l'URL de la ressource
+				String apiUrl = "http://localhost:"+portServeur+"/UE/delete"; // Remplacez par votre URL réelle
+				// Créer une instance de WebTarget pour l'URL de la ressource
+        		WebTarget target = client.target(apiUrl);
+
+				String idselect = idUE.getText().toString();
+				
+				Form form = new Form();
+				form.param("id",idselect);
+
+				// Envoyer la requête POST avec les données
+       			Response response = target
+                .request(MediaType.APPLICATION_JSON)
+                .post(Entity.entity(form, MediaType.APPLICATION_FORM_URLENCODED));
+				
+				
+				console.append(response.toString());
+				// Traiter la réponse
+				if (response.getStatus() == 200) {
+					String resultat = response.readEntity(String.class);
+					JSONObject view  = new JSONObject(resultat);
+					if (view.getString("result").equals("done")){
+						console.setText("");
+						console.append("UE supprimée, id :"+ idselect);
+					}
+						
+				} else {
+					System.out.println("Erreur lors de la requête. Code : " + response.getStatus());
+				}
+
+
+
 
 				// String id = idUE.getText();
 				// JSONObject obj = new JSONObject();
@@ -685,29 +776,67 @@ public class MainWindow {
 		JButton vEleve = new JButton("Afficher élève");
 		vEleve.addActionListener(new ActionListener() {
 			@Override
+			
 			public void actionPerformed(ActionEvent e) {
+				// Créer une instance du client JAX-RS
+				Client client = ClientBuilder.newClient();
+
+				// Définir l'URL de la ressource
+				String apiUrl = "http://localhost:"+portServeur+"/Eleve/search"; // Remplacez par votre URL réelle
+				// Créer une instance de WebTarget pour l'URL de la ressource
+        		WebTarget target = client.target(apiUrl);
+
+				String idselect = idEleve.getText().toString();
+				
+				Form form = new Form();
+				form.param("id",idselect);
+
+				// Envoyer la requête POST avec les données
+       			Response response = target
+                .request(MediaType.APPLICATION_JSON)
+                .post(Entity.entity(form, MediaType.APPLICATION_FORM_URLENCODED));
+				
+				// Traiter la réponse
+				if (response.getStatus() == 200) {
+
+					String resultat = response.readEntity(String.class);
+					JSONObject view  = new JSONObject(resultat);
+					String id = view.getString("id");
+					String prenom = view.getString("prenom");
+					String nom = view.getString("nom");
+					console.setText("");
+					console.append(" Elève : ID ; Prenom ; Nom \n");
+					console.append(""+id+" ; "+ prenom +" ; "+ nom +"\n");
+				} else {
+					System.out.println("Erreur lors de la requête. Code : " + response.getStatus());
+				}
+
+			}
+
+
 
 				// JSONObject req = new JSONObject();
 				// req.put("id", idEleve.getText());
 				// String rep = sess.getEleve(req.toString());
 				// if (!rep.equals("erreur"))
 				// {
-				// JSONObject view = new JSONObject(rep);
-				// String id = view.getString("id");
-				// String prenom = view.getString("prenom");
-				// String nom = view.getString("nom");
-				// console.setText("");
-				// console.append(" Elève : ID ; Prenom ; Nom \n");
-				// console.append(""+id+" ; "+ prenom +" ; "+ nom +"\n");
+				// 	JSONObject view  = new JSONObject(rep);
+				// 	String id = view.getString("id");
+				// 	String prenom = view.getString("prenom");
+				// 	String nom = view.getString("nom");
+				// 	console.setText("");
+				// 	console.append(" Elève : ID ; Prenom ; Nom \n");
+				// 	console.append(""+id+" ; "+ prenom +" ; "+ nom +"\n");
 				// }
 				// else
 				// {
-				// console.setText("");
-				// console.append("Erreur affichage vérfier l'éxitence de l'id\n");
+				// 	console.setText("");
+				// 	console.append("Erreur affichage vérfier l'éxitence de l'id\n");
 				// }
 
+
 			}
-		});
+		);
 		vEleve.setBounds(303, 186, 135, 29);
 		vEleve.setForeground(Color.white);
 		vEleve.setBackground(Color.DARK_GRAY);
@@ -717,6 +846,39 @@ public class MainWindow {
 		vSujet.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
+				// Créer une instance du client JAX-RS
+				Client client = ClientBuilder.newClient();
+
+				// Définir l'URL de la ressource
+				String apiUrl = "http://localhost:"+portServeur+"/Sujet/search"; // Remplacez par votre URL réelle
+				// Créer une instance de WebTarget pour l'URL de la ressource
+        		WebTarget target = client.target(apiUrl);
+
+				String idselect = idSujet.getText().toString();
+				
+				Form form = new Form();
+				form.param("id",idselect);
+
+				// Envoyer la requête POST avec les données
+       			Response response = target
+                .request(MediaType.APPLICATION_JSON)
+                .post(Entity.entity(form, MediaType.APPLICATION_FORM_URLENCODED));
+				
+				// Traiter la réponse
+				if (response.getStatus() == 200) {
+
+					String resultat = response.readEntity(String.class);
+					JSONObject view  = new JSONObject(resultat);
+				 	String id = view.getString("id");
+				 	String titre = view.getString("titre");
+				 	LocalTime fin = LocalTime.parse(view.getString("fin"));
+				 	LocalDate jour = LocalDate.parse(view.getString("jour"));
+				 	console.setText("");
+				 	console.append("Sujet : ID ; titre ; fin ; jour \n");
+				 	console.append(""+id+" ; "+ titre +" ; "+ fin +" ; "+jour +"\n");
+				} else {
+					System.out.println("Erreur lors de la requête. Code : " + response.getStatus());
+				}
 				// JSONObject req = new JSONObject();
 				// req.put("id", idSujet.getText());
 				// String rep = sess.getSujet(req.toString());
@@ -748,6 +910,42 @@ public class MainWindow {
 		vUE.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
+				// Créer une instance du client JAX-RS
+				Client client = ClientBuilder.newClient();
+
+				// Définir l'URL de la ressource
+				String apiUrl = "http://localhost:"+portServeur+"/UE/search"; // Remplacez par votre URL réelle
+				// Créer une instance de WebTarget pour l'URL de la ressource
+        		WebTarget target = client.target(apiUrl);
+
+				String idselect = idUE.getText().toString();
+				
+				Form form = new Form();
+				form.param("id",idselect);
+
+				// Envoyer la requête POST avec les données
+       			Response response = target
+                .request(MediaType.APPLICATION_JSON)
+                .post(Entity.entity(form, MediaType.APPLICATION_FORM_URLENCODED));
+				
+				// Traiter la réponse
+				if (response.getStatus() == 200) {
+					String resultat = response.readEntity(String.class);
+					JSONObject view  = new JSONObject(resultat);
+					String id = view.getString("id");
+					String code = view.getString("code");
+					String intitule = view.getString("intitule");
+					float cours = Float.parseFloat(view.getString("cours"));
+					float td = Float.parseFloat(view.getString("td"));
+					float tp = Float.parseFloat(view.getString("tp"));
+					float valeur = Float.parseFloat(view.getString("valeur"));
+					console.setText("");
+					console.append("UE : ID;code ; intitule ; cours;td ; tp;valeur \n");
+					console.append(""+id+" ; "+ code +" ; "+ intitule +" ; "+cours +" ; "+td+ " ; "+ tp +" ; "+valeur+"\n");
+				} else {
+					System.out.println("Erreur lors de la requête. Code : " + response.getStatus());
+				}
+
 				// JSONObject req = new JSONObject();
 				// req.put("id", idUE.getText());
 				// String rep = sess.getUE(req.toString());
@@ -782,6 +980,35 @@ public class MainWindow {
 		dSujet.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
+				// Créer une instance du client JAX-RS
+				Client client = ClientBuilder.newClient();
+
+				// Définir l'URL de la ressource
+				String apiUrl = "http://localhost:"+portServeur+"/Sujet/delete"; // Remplacez par votre URL réelle
+				// Créer une instance de WebTarget pour l'URL de la ressource
+        		WebTarget target = client.target(apiUrl);
+
+				String idselect = idSujet.getText().toString();
+				
+				Form form = new Form();
+				form.param("id",idselect);
+
+				// Envoyer la requête POST avec les données
+       			Response response = target
+                .request(MediaType.APPLICATION_JSON)
+                .post(Entity.entity(form, MediaType.APPLICATION_FORM_URLENCODED));
+				
+				
+				console.append(response.toString());
+				// Traiter la réponse
+				if (response.getStatus() == 200) {
+					String resultat = response.readEntity(String.class);
+					JSONObject view  = new JSONObject(resultat);
+					if (view.getString("result").equals("done"))
+						console.append("Sujet supprimée, id :"+ idselect);
+				} else {
+					System.out.println("Erreur lors de la requête. Code : " + response.getStatus());
+				}
 				// String id = idSujet.getText();
 				// JSONObject obj = new JSONObject();
 				// obj.put("UUID", id);
@@ -803,6 +1030,40 @@ public class MainWindow {
 		dEleve.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
+				// Créer une instance du client JAX-RS
+				Client client = ClientBuilder.newClient();
+
+				// Définir l'URL de la ressource
+				String apiUrl = "http://localhost:"+portServeur+"/Eleve/delete"; // Remplacez par votre URL réelle
+				// Créer une instance de WebTarget pour l'URL de la ressource
+        		WebTarget target = client.target(apiUrl);
+
+				String idselect = idEleve.getText().toString();
+				
+				Form form = new Form();
+				form.param("id",idselect);
+
+				// Envoyer la requête POST avec les données
+       			Response response = target
+                .request(MediaType.APPLICATION_JSON)
+                .post(Entity.entity(form, MediaType.APPLICATION_FORM_URLENCODED));
+				
+				
+				console.append(response.toString());
+				// Traiter la réponse
+				if (response.getStatus() == 200) {
+					console.setText("");
+					String resultat = response.readEntity(String.class);
+					JSONObject view  = new JSONObject(resultat);
+					if (view.getString("result").equals("done")){
+						console.append("Eleve supprimée, id :"+ idselect);
+					}
+						
+				} else {
+					System.out.println("Erreur lors de la requête. Code : " + response.getStatus());
+				}
+
+				client.close();
 				// String id = idEleve.getText();
 				// JSONObject obj = new JSONObject();
 				// obj.put("UUID", id);
