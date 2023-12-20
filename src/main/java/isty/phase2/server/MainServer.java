@@ -96,6 +96,23 @@ public class MainServer {
             	String ls = sess.listSujet();
                 return ls;
         }
+        @POST
+        @Path("/create")
+        @Consumes(MediaType.APPLICATION_FORM_URLENCODED)
+        @Produces(MediaType.APPLICATION_JSON)
+        public static String createGroupe(@FormParam("id") String id,@FormParam("titre") String tit, @FormParam("fin") String fi,@FormParam("jour") String jo ) {
+            	
+                // Convertissez le nombre en une chaîne
+				
+				JSONObject obj = new JSONObject();
+				obj.put("id", id);
+				obj.put("titre", tit);
+				obj.put("fin", fi);
+				obj.put("jour", jo);
+
+                String ls = sess.createSujet(obj.toString());
+                return ls;
+        }
     }
     @Path("/Groupe")
     public static class GroupeResource {
@@ -110,16 +127,17 @@ public class MainServer {
         @Path("/create")
         @Consumes(MediaType.APPLICATION_FORM_URLENCODED)
         @Produces(MediaType.APPLICATION_JSON)
-        public static String createGroupe(@FormParam("prenom") String p, @FormParam("nom") String n,@FormParam("id") String id ) {
+        public static String createGroupe(@FormParam("id") String id,@FormParam("iEU") String iue, @FormParam("iEleve") String iel,@FormParam("iSujet") String isu ) {
             	
                 // Convertissez le nombre en une chaîne
 				
 				JSONObject obj = new JSONObject();
 				obj.put("id", id);
-				obj.put("prenom", p);
-				obj.put("nom", n);
+				obj.put("ueID", iue);
+				obj.put("eleveID", iel);
+				obj.put("sujetID", isu);
 
-                String ls = sess.createEleve(obj.toString());
+                String ls = sess.createGroupe(obj.toString());
                 return ls;
         }
     }
@@ -130,6 +148,28 @@ public class MainServer {
         @Path("/list")
         public static String getUEList() {
             	String ls = sess.listEU();
+                return ls;
+        }
+
+        @POST
+        @Path("/create")
+        @Consumes(MediaType.APPLICATION_FORM_URLENCODED)
+        @Produces(MediaType.APPLICATION_JSON)
+        public static String createEleve(@FormParam("id") String id,@FormParam("code") String co,@FormParam("intitule") String inti,
+        @FormParam("cours") String cou,@FormParam("td") String TD,@FormParam("tp") String TP,@FormParam("valeur") String val) {
+            	
+                // Convertissez le nombre en une chaîne
+				
+				JSONObject obj = new JSONObject();
+				obj.put("id", id);
+				obj.put("code", co);
+				obj.put("intitule", inti);
+				obj.put("cours", cou);
+				obj.put("td", TD);
+				obj.put("tp", TP);
+				obj.put("valeur", val);
+
+                String ls = sess.createEU(obj.toString());
                 return ls;
         }
     }
