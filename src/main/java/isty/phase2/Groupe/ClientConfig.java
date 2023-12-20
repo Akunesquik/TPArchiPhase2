@@ -1,6 +1,10 @@
 package isty.phase2.Groupe;
 
 import java.util.logging.Logger;
+
+import javax.ws.rs.core.UriBuilder;
+import javax.ws.rs.core.UriBuilderException;
+
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.Files;
@@ -8,6 +12,7 @@ import com.google.gson.Gson;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.net.MalformedURLException;
 
 public class ClientConfig {
 	static final String configDir = "clientConfig";
@@ -75,6 +80,18 @@ public class ClientConfig {
 			e.printStackTrace();
 		}
 		return conf;
+	}
+	
+	public String getURL()
+	{
+		try {
+			return UriBuilder.fromUri(adress).port(port).build().toString();
+		} catch (IllegalArgumentException e) {
+			e.printStackTrace();
+		} catch (UriBuilderException e) {
+			e.printStackTrace();
+		}
+		return adress + port;
 	}
 
 	public String getAdress() {

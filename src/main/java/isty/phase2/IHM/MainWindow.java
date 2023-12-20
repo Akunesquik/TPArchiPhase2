@@ -35,22 +35,21 @@ import org.json.JSONObject;
 public class MainWindow {
 	private static Logger logger = Logger.getLogger(MainWindow.class.getSimpleName());
 	public JFrame frame;
-
+	ClientConfig clientConfig;
 	/**
 	 * Create the application.
 	 */
-	public MainWindow(GroupeImplementation sess) {
+	public MainWindow() {
 
-		initialize(sess);
+		initialize();
 	}
 
 	/**
 	 * Initialize the contents of the frame.
 	 */
-	private void initialize(GroupeImplementation sess) {
+	private void initialize() {
 		ClientConfig.configCheck();
-		ClientConfig clientConfig = ClientConfig.loadConfig();
-		int portServeur = clientConfig.getPort();
+		clientConfig = ClientConfig.loadConfig();
 
 		frame = new JFrame();
 		frame.setBounds(100, 100, 600, 600);
@@ -524,7 +523,7 @@ public class MainWindow {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 
-				String url = "http://localhost:" + portServeur + "/hello"; // Remplacez par votre endpoint réel
+				String url = clientConfig.getURL() + "hello"; // Remplacez par votre endpoint réel
 
 				Client client = ClientBuilder.newClient();
 				Response response = client.target(url).request().get();
@@ -600,7 +599,7 @@ public class MainWindow {
 				Client client = ClientBuilder.newClient();
 
 				// Définir l'URL de la ressource
-				String apiUrl = "http://localhost:" + portServeur + "/Groupe/create"; // Remplacez par votre URL réelle
+				String apiUrl = clientConfig.getURL() + "Groupe/create"; // Remplacez par votre URL réelle
 				// Créer une instance de WebTarget pour l'URL de la ressource
 				WebTarget target = client.target(apiUrl);
 
@@ -608,22 +607,30 @@ public class MainWindow {
 				String iel = iEleve.getText();
 				String iue = iEU.getText();
 
+				// Générez un ID unique entre 1 et 100 inclus
+				int randomId;
+				do {
+				     randomId = random.nextInt(100) + 1;
+				} while (!groupeIds.add(randomId));
+				String id = Integer.toString(randomId);
+
 				Form form = new Form();
-				form.param("iSujet", isu);
+				form.param("id",id);
+				form.param("iSujet",isu);
 				form.param("iEleve", iel);
 				form.param("iEU", iue);
 
-				// Envoyer la requête POST avec les données
-				Response response = target.request(MediaType.APPLICATION_JSON)
-						.post(Entity.entity(form, MediaType.APPLICATION_FORM_URLENCODED));
-
+       			Response response = target
+                .request(MediaType.APPLICATION_JSON)
+                .post(Entity.entity(form, MediaType.APPLICATION_FORM_URLENCODED));
+				
 				// Traiter la réponse
 				if (response.getStatus() == 200) {
 
 					String resultat = response.readEntity(String.class);
 					JSONObject objRet = new JSONObject(resultat);
 					console.setText("");
-					console.append("Eleve crée, id :" + objRet.getString("id"));
+					console.append("Groupe crée, id :"+ objRet.getString("id"));
 				} else {
 					System.out.println("Erreur lors de la requête. Code : " + response.getStatus());
 				}
@@ -816,6 +823,53 @@ public class MainWindow {
 		cUE.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
+
+				// Créer une instance du client JAX-RS
+				Client client = ClientBuilder.newClient();
+
+				// Définir l'URL de la ressource
+				String apiUrl = clientConfig.getURL() +"UE/create"; // Remplacez par votre URL réelle
+				// Créer une instance de WebTarget pour l'URL de la ressource
+        		WebTarget target = client.target(apiUrl);
+
+				String co = code.getText();
+				String inti = intitule.getText();
+				String cou = cours.getText();
+				String TD = td.getText();
+				String TP = tp.getText();
+				String val = valeur.getText();
+
+				// Générez un ID unique entre 1 et 100 inclus
+				int randomId;
+				do {
+				    randomId = random.nextInt(100) + 1;
+				} while (!eleveIds.add(randomId));
+				String id = Integer.toString(randomId);
+
+				Form form = new Form();
+				form.param("id", id);
+				form.param("code", co);
+				form.param("intitule", inti);
+				form.param("cours", cou);
+				form.param("td", TD);
+				form.param("tp", TP);
+				form.param("valeur", val);
+
+				// Envoyer la requête POST avec les données
+       			Response response = target
+                .request(MediaType.APPLICATION_JSON)
+                .post(Entity.entity(form, MediaType.APPLICATION_FORM_URLENCODED));
+				// Traiter la réponse
+				if (response.getStatus() == 200) {
+
+					String resultat = response.readEntity(String.class);
+					JSONObject objRet = new JSONObject(resultat);
+					console.setText("");
+					console.append("UE cree, id :"+ objRet.getString("id"));
+				} else {
+					logger.warning("Erreur lors de la requête. Code : " + response.getStatus());
+				}
+				
 				// String co = code.getText();
 				// String inti = intitule.getText();
 				// String cou = cours.getText();
@@ -850,11 +904,53 @@ public class MainWindow {
 		frame.getContentPane().add(cUE);
 
 		JButton cSujet = new JButton("Creer Sujet");
-
 		cSujet.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 
+				// Créer une instance du client JAX-RS
+				Client client = ClientBuilder.newClient();
+
+				// Définir l'URL de la ressource
+				String apiUrl = clientConfig.getURL() + "Sujet/create"; // Remplacez par votre URL réelle
+				// Créer une instance de WebTarget pour l'URL de la ressource
+        		WebTarget target = client.target(apiUrl);
+
+				int randomId;
+				 do {
+				     randomId = random.nextInt(100) + 1;
+				 } while (!eleveIds.add(randomId));
+
+				String id = Integer.toString(randomId);
+				String tit = titre.getText();
+				String fi = fin.getText();
+				String jo = jour.getText();
+				// Générez un ID unique entre 1 et 100 inclus
+				 
+
+				Form form = new Form();
+				form.param("id", id);
+				form.param("titre", tit);
+				form.param("fin", fi);
+				form.param("jour", jo);
+
+				// Envoyer la requête POST avec les données
+       			Response response = target
+                .request(MediaType.APPLICATION_JSON)
+                .post(Entity.entity(form, MediaType.APPLICATION_FORM_URLENCODED));
+				
+				// Traiter la réponse
+				if (response.getStatus() == 200) {
+
+					String resultat = response.readEntity(String.class);
+					JSONObject objRet = new JSONObject(resultat);
+					console.setText("");
+					console.append("Sujet crée, id :"+ objRet.getString("id"));
+				} else {
+					logger.warning("Erreur lors de la requête. Code : " + response.getStatus());
+				}
+				
+				client.close();
 				// // Convertissez le nombre en une chaîne
 				// // Générez un ID unique entre 1 et 100 inclus
 				// int randomId;
@@ -893,7 +989,7 @@ public class MainWindow {
 				Client client = ClientBuilder.newClient();
 
 				// Définir l'URL de la ressource
-				String apiUrl = "http://localhost:" + portServeur + "/Eleve/create"; // Remplacez par votre URL réelle
+				String apiUrl = clientConfig.getURL() + "Eleve/create"; // Remplacez par votre URL réelle
 				// Créer une instance de WebTarget pour l'URL de la ressource
 				WebTarget target = client.target(apiUrl);
 
@@ -925,6 +1021,9 @@ public class MainWindow {
 					logger.warning("Erreur lors de la requête. Code : " + response.getStatus());
 				}
 
+				client.close();
+				
+
 				// String p = prenom.getText();
 				// String n = nom.getText();
 				// // Générez un ID unique entre 1 et 100 inclus
@@ -954,7 +1053,7 @@ public class MainWindow {
 		lGroupe.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				String url = "http://localhost:" + portServeur + "/Groupe/list"; // Remplacez par votre endpoint réel
+				String url = clientConfig.getURL() + "Groupe/list"; // Remplacez par votre endpoint réel
 
 				Client client = ClientBuilder.newClient();
 				Response response = client.target(url).request().get();
@@ -989,7 +1088,7 @@ public class MainWindow {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 
-				String url = "http://localhost:" + portServeur + "/Eleve/list"; // Remplacez par votre endpoint réel
+				String url = clientConfig.getURL() + "Eleve/list"; // Remplacez par votre endpoint réel
 
 				Client client = ClientBuilder.newClient();
 				Response response = client.target(url).request().get();
@@ -1025,7 +1124,7 @@ public class MainWindow {
 		lSujet.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				String url = "http://localhost:" + portServeur + "/Sujet/list"; // Remplacez par votre endpoint réel
+				String url = clientConfig.getURL() + "Sujet/list"; // Remplacez par votre endpoint réel
 
 				Client client = ClientBuilder.newClient();
 				Response response = client.target(url).request().get();
@@ -1059,7 +1158,7 @@ public class MainWindow {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 
-				String url = "http://localhost:" + portServeur + "/UE/list"; // Remplacez par votre endpoint réel
+				String url = clientConfig.getURL() +"UE/list"; // Remplacez par votre endpoint réel
 
 				Client client = ClientBuilder.newClient();
 				Response response = client.target(url).request().get();

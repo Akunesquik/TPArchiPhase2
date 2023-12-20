@@ -11,9 +11,7 @@ public static void main(String[] args) {
 	EventQueue.invokeLater(new Runnable() {
 		public void run() {
 			try {
-				GroupeImplementation sess = new GroupeImplementation();
-				sess.initDatabase();
-				MainWindow window = new MainWindow(sess);
+				MainWindow window = new MainWindow();
 				window.frame.setVisible(true);
 			} catch (Exception e) {
 				e.printStackTrace();
