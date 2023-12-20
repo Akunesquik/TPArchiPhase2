@@ -937,6 +937,35 @@ public class MainWindow {
 		dSujet.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
+				// Créer une instance du client JAX-RS
+				Client client = ClientBuilder.newClient();
+
+				// Définir l'URL de la ressource
+				String apiUrl = "http://localhost:"+portServeur+"/Sujet/delete"; // Remplacez par votre URL réelle
+				// Créer une instance de WebTarget pour l'URL de la ressource
+        		WebTarget target = client.target(apiUrl);
+
+				String idselect = idSujet.getText().toString();
+				
+				Form form = new Form();
+				form.param("id",idselect);
+
+				// Envoyer la requête POST avec les données
+       			Response response = target
+                .request(MediaType.APPLICATION_JSON)
+                .post(Entity.entity(form, MediaType.APPLICATION_FORM_URLENCODED));
+				
+				
+				console.append(response.toString());
+				// Traiter la réponse
+				if (response.getStatus() == 200) {
+					String resultat = response.readEntity(String.class);
+					JSONObject view  = new JSONObject(resultat);
+					if (view.getString("result").equals("done"))
+						console.append("Sujet supprimée, id :"+ idselect);
+				} else {
+					System.out.println("Erreur lors de la requête. Code : " + response.getStatus());
+				}
 				// String id = idSujet.getText();
 				// JSONObject obj = new JSONObject();
 				// obj.put("UUID", id);
@@ -958,6 +987,35 @@ public class MainWindow {
 		dEleve.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
+				// Créer une instance du client JAX-RS
+				Client client = ClientBuilder.newClient();
+
+				// Définir l'URL de la ressource
+				String apiUrl = "http://localhost:"+portServeur+"/Eleve/delete"; // Remplacez par votre URL réelle
+				// Créer une instance de WebTarget pour l'URL de la ressource
+        		WebTarget target = client.target(apiUrl);
+
+				String idselect = idEleve.getText().toString();
+				
+				Form form = new Form();
+				form.param("id",idselect);
+
+				// Envoyer la requête POST avec les données
+       			Response response = target
+                .request(MediaType.APPLICATION_JSON)
+                .post(Entity.entity(form, MediaType.APPLICATION_FORM_URLENCODED));
+				
+				
+				console.append(response.toString());
+				// Traiter la réponse
+				if (response.getStatus() == 200) {
+					String resultat = response.readEntity(String.class);
+					JSONObject view  = new JSONObject(resultat);
+					if (view.getString("result").equals("done"))
+						console.append("Eleve supprimée, id :"+ idselect);
+				} else {
+					System.out.println("Erreur lors de la requête. Code : " + response.getStatus());
+				}
 				// String id = idEleve.getText();
 				// JSONObject obj = new JSONObject();
 				// obj.put("UUID", id);
