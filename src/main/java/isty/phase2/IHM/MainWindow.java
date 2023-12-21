@@ -55,10 +55,6 @@ public class MainWindow {
 
 		ClientConfig.configCheck();
 		clientConfig = ClientConfig.loadConfig();
-<<<<<<< HEAD
-		
-=======
->>>>>>> 2e2c22a1cf14f1ce41533df7f20d56e4d9bd2621
 
 		frame = new JFrame();
 		frame.setBounds(100, 100, 600, 600);
@@ -497,7 +493,7 @@ public class MainWindow {
 		 */
 		JFormattedTextField idGroupe = new JFormattedTextField();
 		idGroupe.setText("ID");
-		idGroupe.setBounds(12, 157, 295, 26);
+		idGroupe.setBounds(6, 157, 295, 26);
 		idGroupe.addFocusListener(new FocusAdapter() {
 			@Override
 			public void focusGained(FocusEvent e) {
@@ -535,11 +531,7 @@ public class MainWindow {
                 Client client = ClientBuilder.newClient();
 
 				// Définir l'URL de la ressource
-<<<<<<< HEAD
 				String apiUrl = clientConfig.getURL()+"Groupe/delete"; // Remplacez par votre URL réelle
-=======
-				String apiUrl =  clientConfig.getURL() + "Groupe/delete"; // Remplacez par votre URL réelle
->>>>>>> 2e2c22a1cf14f1ce41533df7f20d56e4d9bd2621
 				// Créer une instance de WebTarget pour l'URL de la ressource
         		WebTarget target = client.target(apiUrl);
 
@@ -602,11 +594,7 @@ public class MainWindow {
 				Client client = ClientBuilder.newClient();
 
 				// Définir l'URL de la ressource
-<<<<<<< HEAD
 				String apiUrl = clientConfig.getURL()+"Groupe/search"; // Remplacez par votre URL réelle
-=======
-				String apiUrl = clientConfig.getURL() + "Groupe/search"; // Remplacez par votre URL réelle
->>>>>>> 2e2c22a1cf14f1ce41533df7f20d56e4d9bd2621
 				// Créer une instance de WebTarget pour l'URL de la ressource
         		WebTarget target = client.target(apiUrl);
 
@@ -736,11 +724,7 @@ public class MainWindow {
 				Client client = ClientBuilder.newClient();
 
 				// Définir l'URL de la ressource
-<<<<<<< HEAD
 				String apiUrl = clientConfig.getURL()+"UE/delete"; // Remplacez par votre URL réelle
-=======
-				String apiUrl = clientConfig.getURL() + "UE/delete"; // Remplacez par votre URL réelle
->>>>>>> 2e2c22a1cf14f1ce41533df7f20d56e4d9bd2621
 				// Créer une instance de WebTarget pour l'URL de la ressource
         		WebTarget target = client.target(apiUrl);
 
@@ -797,12 +781,8 @@ public class MainWindow {
 				Client client = ClientBuilder.newClient();
 
 				// Définir l'URL de la ressource
-<<<<<<< HEAD
 				String apiUrl = clientConfig.getURL()+"Eleve/search"; // Remplacez par votre URL réelle
 				System.out.println(clientConfig.getURL());
-=======
-				String apiUrl = clientConfig.getURL() + "Eleve/search"; // Remplacez par votre URL réelle
->>>>>>> 2e2c22a1cf14f1ce41533df7f20d56e4d9bd2621
 				// Créer une instance de WebTarget pour l'URL de la ressource
         		WebTarget target = client.target(apiUrl);
 
@@ -870,11 +850,7 @@ public class MainWindow {
 				Client client = ClientBuilder.newClient();
 
 				// Définir l'URL de la ressource
-<<<<<<< HEAD
 				String apiUrl = clientConfig.getURL()+"Sujet/search"; // Remplacez par votre URL réelle
-=======
-				String apiUrl = clientConfig.getURL() + "Sujet/search"; // Remplacez par votre URL réelle
->>>>>>> 2e2c22a1cf14f1ce41533df7f20d56e4d9bd2621
 				// Créer une instance de WebTarget pour l'URL de la ressource
         		WebTarget target = client.target(apiUrl);
 
@@ -938,11 +914,7 @@ public class MainWindow {
 				Client client = ClientBuilder.newClient();
 
 				// Définir l'URL de la ressource
-<<<<<<< HEAD
 				String apiUrl = clientConfig.getURL()+"UE/search"; // Remplacez par votre URL réelle
-=======
-				String apiUrl = clientConfig.getURL() + "UE/search"; // Remplacez par votre URL réelle
->>>>>>> 2e2c22a1cf14f1ce41533df7f20d56e4d9bd2621
 				// Créer une instance de WebTarget pour l'URL de la ressource
         		WebTarget target = client.target(apiUrl);
 
@@ -1012,11 +984,7 @@ public class MainWindow {
 				Client client = ClientBuilder.newClient();
 
 				// Définir l'URL de la ressource
-<<<<<<< HEAD
 				String apiUrl = clientConfig.getURL()+"Sujet/delete"; // Remplacez par votre URL réelle
-=======
-				String apiUrl = clientConfig.getURL() + "Sujet/delete"; // Remplacez par votre URL réelle
->>>>>>> 2e2c22a1cf14f1ce41533df7f20d56e4d9bd2621
 				// Créer une instance de WebTarget pour l'URL de la ressource
         		WebTarget target = client.target(apiUrl);
 
@@ -1065,11 +1033,7 @@ public class MainWindow {
 				Client client = ClientBuilder.newClient();
 
 				// Définir l'URL de la ressource
-<<<<<<< HEAD
 				String apiUrl = clientConfig.getURL()+"Eleve/delete"; // Remplacez par votre URL réelle
-=======
-				String apiUrl = clientConfig.getURL() + "Eleve/delete"; // Remplacez par votre URL réelle
->>>>>>> 2e2c22a1cf14f1ce41533df7f20d56e4d9bd2621
 				// Créer une instance de WebTarget pour l'URL de la ressource
         		WebTarget target = client.target(apiUrl);
 
