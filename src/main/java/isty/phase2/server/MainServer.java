@@ -106,7 +106,7 @@ public class MainServer {
         public static String getUE(@FormParam("id") String id) {
             JSONObject infos = new JSONObject();
             infos.put("id", id);
-            String ls = sess.getUE(infos.toString());
+            String ls = sess.getEleve(infos.toString());
             return ls;
         }
 

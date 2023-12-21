@@ -55,7 +55,7 @@ public class MainWindow {
 
 		ClientConfig.configCheck();
 		clientConfig = ClientConfig.loadConfig();
-		int portServeur = clientConfig.getPort();
+		
 
 		frame = new JFrame();
 		frame.setBounds(100, 100, 600, 600);
@@ -532,7 +532,7 @@ public class MainWindow {
                 Client client = ClientBuilder.newClient();
 
 				// Définir l'URL de la ressource
-				String apiUrl = "http://localhost:"+portServeur+"/Groupe/delete"; // Remplacez par votre URL réelle
+				String apiUrl = clientConfig.getURL()+"Groupe/delete"; // Remplacez par votre URL réelle
 				// Créer une instance de WebTarget pour l'URL de la ressource
         		WebTarget target = client.target(apiUrl);
 
@@ -595,7 +595,7 @@ public class MainWindow {
 				Client client = ClientBuilder.newClient();
 
 				// Définir l'URL de la ressource
-				String apiUrl = "http://localhost:"+portServeur+"/Groupe/search"; // Remplacez par votre URL réelle
+				String apiUrl = clientConfig.getURL()+"Groupe/search"; // Remplacez par votre URL réelle
 				// Créer une instance de WebTarget pour l'URL de la ressource
         		WebTarget target = client.target(apiUrl);
 
@@ -725,7 +725,7 @@ public class MainWindow {
 				Client client = ClientBuilder.newClient();
 
 				// Définir l'URL de la ressource
-				String apiUrl = "http://localhost:"+portServeur+"/UE/delete"; // Remplacez par votre URL réelle
+				String apiUrl = clientConfig.getURL()+"UE/delete"; // Remplacez par votre URL réelle
 				// Créer une instance de WebTarget pour l'URL de la ressource
         		WebTarget target = client.target(apiUrl);
 
@@ -782,7 +782,8 @@ public class MainWindow {
 				Client client = ClientBuilder.newClient();
 
 				// Définir l'URL de la ressource
-				String apiUrl = "http://localhost:"+portServeur+"/Eleve/search"; // Remplacez par votre URL réelle
+				String apiUrl = clientConfig.getURL()+"Eleve/search"; // Remplacez par votre URL réelle
+				System.out.println(clientConfig.getURL());
 				// Créer une instance de WebTarget pour l'URL de la ressource
         		WebTarget target = client.target(apiUrl);
 
@@ -850,7 +851,7 @@ public class MainWindow {
 				Client client = ClientBuilder.newClient();
 
 				// Définir l'URL de la ressource
-				String apiUrl = "http://localhost:"+portServeur+"/Sujet/search"; // Remplacez par votre URL réelle
+				String apiUrl = clientConfig.getURL()+"Sujet/search"; // Remplacez par votre URL réelle
 				// Créer une instance de WebTarget pour l'URL de la ressource
         		WebTarget target = client.target(apiUrl);
 
@@ -914,7 +915,7 @@ public class MainWindow {
 				Client client = ClientBuilder.newClient();
 
 				// Définir l'URL de la ressource
-				String apiUrl = "http://localhost:"+portServeur+"/UE/search"; // Remplacez par votre URL réelle
+				String apiUrl = clientConfig.getURL()+"UE/search"; // Remplacez par votre URL réelle
 				// Créer une instance de WebTarget pour l'URL de la ressource
         		WebTarget target = client.target(apiUrl);
 
@@ -984,7 +985,7 @@ public class MainWindow {
 				Client client = ClientBuilder.newClient();
 
 				// Définir l'URL de la ressource
-				String apiUrl = "http://localhost:"+portServeur+"/Sujet/delete"; // Remplacez par votre URL réelle
+				String apiUrl = clientConfig.getURL()+"Sujet/delete"; // Remplacez par votre URL réelle
 				// Créer une instance de WebTarget pour l'URL de la ressource
         		WebTarget target = client.target(apiUrl);
 
@@ -1034,7 +1035,7 @@ public class MainWindow {
 				Client client = ClientBuilder.newClient();
 
 				// Définir l'URL de la ressource
-				String apiUrl = "http://localhost:"+portServeur+"/Eleve/delete"; // Remplacez par votre URL réelle
+				String apiUrl = clientConfig.getURL()+"Eleve/delete"; // Remplacez par votre URL réelle
 				// Créer une instance de WebTarget pour l'URL de la ressource
         		WebTarget target = client.target(apiUrl);
 
@@ -1104,7 +1105,7 @@ public class MainWindow {
 				int randomId;
 				do {
 				    randomId = random.nextInt(100) + 1;
-				} while (!eleveIds.add(randomId));
+				} while (!ueIds.add(randomId));
 				String id = Integer.toString(randomId);
 
 				Form form = new Form();
@@ -1180,7 +1181,7 @@ public class MainWindow {
 				int randomId;
 				 do {
 				     randomId = random.nextInt(100) + 1;
-				 } while (!eleveIds.add(randomId));
+				 } while (!sujetIds.add(randomId));
 
 				String id = Integer.toString(randomId);
 				String tit = titre.getText();
