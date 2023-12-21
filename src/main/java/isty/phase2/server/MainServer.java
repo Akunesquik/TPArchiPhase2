@@ -103,7 +103,7 @@ public class MainServer {
         @Path("/search")
         @Consumes(MediaType.APPLICATION_FORM_URLENCODED)
         @Produces(MediaType.APPLICATION_JSON)
-        public static String getUE(@FormParam("id") String id) {
+        public static String getEleve(@FormParam("id") String id) {
             JSONObject infos = new JSONObject();
             infos.put("id", id);
             String ls = sess.getEleve(infos.toString());
@@ -156,10 +156,10 @@ public class MainServer {
         @Path("/search")
         @Consumes(MediaType.APPLICATION_FORM_URLENCODED)
         @Produces(MediaType.APPLICATION_JSON)
-        public static String getEleve(@FormParam("id") String id) {
+        public static String getSujet(@FormParam("id") String id) {
             JSONObject infos = new JSONObject();
             infos.put("id", id);
-            String ls = sess.getEleve(infos.toString());
+            String ls = sess.getSujet(infos.toString());
             return ls;
         }
 

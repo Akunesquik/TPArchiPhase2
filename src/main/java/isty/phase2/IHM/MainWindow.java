@@ -55,7 +55,10 @@ public class MainWindow {
 
 		ClientConfig.configCheck();
 		clientConfig = ClientConfig.loadConfig();
+<<<<<<< HEAD
 		
+=======
+>>>>>>> 2e2c22a1cf14f1ce41533df7f20d56e4d9bd2621
 
 		frame = new JFrame();
 		frame.setBounds(100, 100, 600, 600);
@@ -532,7 +535,11 @@ public class MainWindow {
                 Client client = ClientBuilder.newClient();
 
 				// Définir l'URL de la ressource
+<<<<<<< HEAD
 				String apiUrl = clientConfig.getURL()+"Groupe/delete"; // Remplacez par votre URL réelle
+=======
+				String apiUrl =  clientConfig.getURL() + "Groupe/delete"; // Remplacez par votre URL réelle
+>>>>>>> 2e2c22a1cf14f1ce41533df7f20d56e4d9bd2621
 				// Créer une instance de WebTarget pour l'URL de la ressource
         		WebTarget target = client.target(apiUrl);
 
@@ -595,7 +602,11 @@ public class MainWindow {
 				Client client = ClientBuilder.newClient();
 
 				// Définir l'URL de la ressource
+<<<<<<< HEAD
 				String apiUrl = clientConfig.getURL()+"Groupe/search"; // Remplacez par votre URL réelle
+=======
+				String apiUrl = clientConfig.getURL() + "Groupe/search"; // Remplacez par votre URL réelle
+>>>>>>> 2e2c22a1cf14f1ce41533df7f20d56e4d9bd2621
 				// Créer une instance de WebTarget pour l'URL de la ressource
         		WebTarget target = client.target(apiUrl);
 
@@ -614,7 +625,7 @@ public class MainWindow {
 					String resultat = response.readEntity(String.class);
 					console.setText(resultat);
 				} else {
-					System.out.println("Erreur lors de la requête. Code : " + response.getStatus());
+					logger.warning("Erreur lors de la requête. Code : " + response.getStatus());
 				}
 
 			}
@@ -688,7 +699,7 @@ public class MainWindow {
 					console.setText("");
 					console.append("Groupe crée, id :"+ objRet.getString("id"));
 				} else {
-					System.out.println("Erreur lors de la requête. Code : " + response.getStatus());
+					logger.warning("Erreur lors de la requête. Code : " + response.getStatus());
 				}
 
 				// String isu = iSujet.getText();
@@ -725,7 +736,11 @@ public class MainWindow {
 				Client client = ClientBuilder.newClient();
 
 				// Définir l'URL de la ressource
+<<<<<<< HEAD
 				String apiUrl = clientConfig.getURL()+"UE/delete"; // Remplacez par votre URL réelle
+=======
+				String apiUrl = clientConfig.getURL() + "UE/delete"; // Remplacez par votre URL réelle
+>>>>>>> 2e2c22a1cf14f1ce41533df7f20d56e4d9bd2621
 				// Créer une instance de WebTarget pour l'URL de la ressource
         		WebTarget target = client.target(apiUrl);
 
@@ -751,7 +766,7 @@ public class MainWindow {
 					}
 						
 				} else {
-					System.out.println("Erreur lors de la requête. Code : " + response.getStatus());
+					logger.warning("Erreur lors de la requête. Code : " + response.getStatus());
 				}
 
 
@@ -782,8 +797,12 @@ public class MainWindow {
 				Client client = ClientBuilder.newClient();
 
 				// Définir l'URL de la ressource
+<<<<<<< HEAD
 				String apiUrl = clientConfig.getURL()+"Eleve/search"; // Remplacez par votre URL réelle
 				System.out.println(clientConfig.getURL());
+=======
+				String apiUrl = clientConfig.getURL() + "Eleve/search"; // Remplacez par votre URL réelle
+>>>>>>> 2e2c22a1cf14f1ce41533df7f20d56e4d9bd2621
 				// Créer une instance de WebTarget pour l'URL de la ressource
         		WebTarget target = client.target(apiUrl);
 
@@ -809,7 +828,7 @@ public class MainWindow {
 					console.append(" Elève : ID ; Prenom ; Nom \n");
 					console.append(""+id+" ; "+ prenom +" ; "+ nom +"\n");
 				} else {
-					System.out.println("Erreur lors de la requête. Code : " + response.getStatus());
+					logger.warning("Erreur lors de la requête. Code : " + response.getStatus());
 				}
 
 			}
@@ -851,7 +870,11 @@ public class MainWindow {
 				Client client = ClientBuilder.newClient();
 
 				// Définir l'URL de la ressource
+<<<<<<< HEAD
 				String apiUrl = clientConfig.getURL()+"Sujet/search"; // Remplacez par votre URL réelle
+=======
+				String apiUrl = clientConfig.getURL() + "Sujet/search"; // Remplacez par votre URL réelle
+>>>>>>> 2e2c22a1cf14f1ce41533df7f20d56e4d9bd2621
 				// Créer une instance de WebTarget pour l'URL de la ressource
         		WebTarget target = client.target(apiUrl);
 
@@ -878,7 +901,7 @@ public class MainWindow {
 				 	console.append("Sujet : ID ; titre ; fin ; jour \n");
 				 	console.append(""+id+" ; "+ titre +" ; "+ fin +" ; "+jour +"\n");
 				} else {
-					System.out.println("Erreur lors de la requête. Code : " + response.getStatus());
+					logger.warning("Erreur lors de la requête. Code : " + response.getStatus());
 				}
 				// JSONObject req = new JSONObject();
 				// req.put("id", idSujet.getText());
@@ -915,7 +938,11 @@ public class MainWindow {
 				Client client = ClientBuilder.newClient();
 
 				// Définir l'URL de la ressource
+<<<<<<< HEAD
 				String apiUrl = clientConfig.getURL()+"UE/search"; // Remplacez par votre URL réelle
+=======
+				String apiUrl = clientConfig.getURL() + "UE/search"; // Remplacez par votre URL réelle
+>>>>>>> 2e2c22a1cf14f1ce41533df7f20d56e4d9bd2621
 				// Créer une instance de WebTarget pour l'URL de la ressource
         		WebTarget target = client.target(apiUrl);
 
@@ -944,7 +971,7 @@ public class MainWindow {
 					console.append("UE : ID;code ; intitule ; cours;td ; tp;valeur \n");
 					console.append(""+id+" ; "+ code +" ; "+ intitule +" ; "+cours +" ; "+td+ " ; "+ tp +" ; "+valeur+"\n");
 				} else {
-					System.out.println("Erreur lors de la requête. Code : " + response.getStatus());
+					logger.warning("Erreur lors de la requête. Code : " + response.getStatus());
 				}
 
 				// JSONObject req = new JSONObject();
@@ -985,7 +1012,11 @@ public class MainWindow {
 				Client client = ClientBuilder.newClient();
 
 				// Définir l'URL de la ressource
+<<<<<<< HEAD
 				String apiUrl = clientConfig.getURL()+"Sujet/delete"; // Remplacez par votre URL réelle
+=======
+				String apiUrl = clientConfig.getURL() + "Sujet/delete"; // Remplacez par votre URL réelle
+>>>>>>> 2e2c22a1cf14f1ce41533df7f20d56e4d9bd2621
 				// Créer une instance de WebTarget pour l'URL de la ressource
         		WebTarget target = client.target(apiUrl);
 
@@ -1000,7 +1031,6 @@ public class MainWindow {
                 .post(Entity.entity(form, MediaType.APPLICATION_FORM_URLENCODED));
 				
 				
-				console.append(response.toString());
 				// Traiter la réponse
 				if (response.getStatus() == 200) {
 					String resultat = response.readEntity(String.class);
@@ -1008,7 +1038,7 @@ public class MainWindow {
 					if (view.getString("result").equals("done"))
 						console.append("Sujet supprimée, id :"+ idselect);
 				} else {
-					System.out.println("Erreur lors de la requête. Code : " + response.getStatus());
+					logger.warning("Erreur lors de la requête. Code : " + response.getStatus());
 				}
 				// String id = idSujet.getText();
 				// JSONObject obj = new JSONObject();
@@ -1035,7 +1065,11 @@ public class MainWindow {
 				Client client = ClientBuilder.newClient();
 
 				// Définir l'URL de la ressource
+<<<<<<< HEAD
 				String apiUrl = clientConfig.getURL()+"Eleve/delete"; // Remplacez par votre URL réelle
+=======
+				String apiUrl = clientConfig.getURL() + "Eleve/delete"; // Remplacez par votre URL réelle
+>>>>>>> 2e2c22a1cf14f1ce41533df7f20d56e4d9bd2621
 				// Créer une instance de WebTarget pour l'URL de la ressource
         		WebTarget target = client.target(apiUrl);
 
@@ -1061,7 +1095,7 @@ public class MainWindow {
 					}
 						
 				} else {
-					System.out.println("Erreur lors de la requête. Code : " + response.getStatus());
+					logger.warning("Erreur lors de la requête. Code : " + response.getStatus());
 				}
 
 				client.close();
@@ -1090,7 +1124,7 @@ public class MainWindow {
 				Client client = ClientBuilder.newClient();
 
 				// Définir l'URL de la ressource
-				String apiUrl = clientConfig.getURL() +"UE/create"; // Remplacez par votre URL réelle
+				String apiUrl = clientConfig.getURL() + "UE/create"; // Remplacez par votre URL réelle
 				// Créer une instance de WebTarget pour l'URL de la ressource
         		WebTarget target = client.target(apiUrl);
 
