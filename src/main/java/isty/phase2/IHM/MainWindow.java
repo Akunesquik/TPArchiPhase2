@@ -998,7 +998,6 @@ public class MainWindow {
                 .post(Entity.entity(form, MediaType.APPLICATION_FORM_URLENCODED));
 				
 				
-				console.append(response.toString());
 				// Traiter la réponse
 				if (response.getStatus() == 200) {
 					String resultat = response.readEntity(String.class);
