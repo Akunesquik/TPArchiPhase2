@@ -11,6 +11,7 @@ import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
@@ -265,6 +266,7 @@ public class GroupeImplementation implements GroupeInterface {
 		// TODO Auto-generated method stub
 		String UUID = null;
 		JSONObject obj = new JSONObject(JSONEntry);
+		List<Groupe> allgroups = Groupe.getAll();
 		try {
 
 			UUID = obj.getString("UUID");
@@ -274,6 +276,13 @@ public class GroupeImplementation implements GroupeInterface {
 
 		}
 		try {
+			for(Groupe gp : allgroups)
+			{
+				if(gp.getUeID().equals(UUID))
+				{
+					gp.delete();
+				}
+			}
 			UniteEnseignement.getById(UUID).delete();
 			return "{ \"result\": \"done\" ,  \"type\": \"EU\" , \"UUID\": \"" + UUID + "\"  }";
 
@@ -288,6 +297,7 @@ public class GroupeImplementation implements GroupeInterface {
 		// TODO Auto-generated method stub
 		String UUID = null;
 		JSONObject obj = new JSONObject(JSONEntry);
+		List<Groupe> allgroups = Groupe.getAll();
 		try {
 
 			UUID = obj.getString("UUID");
@@ -297,6 +307,13 @@ public class GroupeImplementation implements GroupeInterface {
 
 		}
 		try {
+			for(Groupe gp : allgroups)
+			{
+				if(gp.getSujetID().equals(UUID))
+				{
+					gp.delete();
+				}
+			}
 			Sujet.getById(UUID).delete();
 			return "{ \"result\": \"done\" ,  \"type\": \"sujet\" , \"UUID\": \"" + UUID + "\"  }";
 		} catch (Exception e) {
